@@ -21,7 +21,7 @@ In case you have setup your directory and executes the script, it won't override
 
 # How context menus work
 
-``` json
+``` js
 [
 	// Group item
 	{
