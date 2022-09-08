@@ -73,7 +73,7 @@ Removing it's faster than importing.
 In case your json file has a wrong format or even inappropriate keys or values it will stop executing and shows you what's the error and the specific json file (remember you can work with more than one json files).
 
 # Extra
-In case you want to know what is the manual way of creating context menus check this [link](https://medium.com/analytics-vidhya/creating-cascading-context-menus-with-the-windows-10-registry-f1cf3cd8398f) out.
+In case you want to know what is the manual way of creating context menus check this [medium article](https://medium.com/analytics-vidhya/creating-cascading-context-menus-with-the-windows-10-registry-f1cf3cd8398f).
 
 # Contributions
 You can contribute to this repository in case you notice any error or something that can be improve.
