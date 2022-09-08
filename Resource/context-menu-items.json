@@ -45,5 +45,11 @@
         "Type" : "File",
         "Icon" : "C:/Program Files/internet explorer/images/bing.ico",
         "Command" : "powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length"
+    },
+    {
+        "Key" : "uwu",
+        "Name" : "PEGAR A DOSTEN",
+        "Type" : "Desktop",
+        "Command" :"powershell.exe -NoExit -Command Write '*Le pega a Dosten con un perro disecado*'"
     }
 ]

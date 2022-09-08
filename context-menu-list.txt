@@ -2,4 +2,4 @@
 # As you see commets starts with a hash (#)
 
 # This is the deafault json with a context menu
-Source/context-menu-items.json
+Resource/context-menu-items.json
