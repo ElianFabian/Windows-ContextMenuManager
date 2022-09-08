@@ -169,7 +169,7 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verb
         # Create shell (container of subitems)
         $itemShellPath = (New-Item -Path $ItemPath -Name Shell).PSPath.Replace("*", "``*")
 
-        Write-Verbose "New item property: $ItemPath\MUIVerb = $($Item.$PROPERTY_NAM)" -Verbose:$Verbose
+        Write-Verbose "New item property: $ItemPath\MUIVerb = $($Item.$PROPERTY_NAME)" -Verbose:$Verbose
         Write-Verbose "New item property: $ItemPath\subcommands" -Verbose:$Verbose
         Write-Verbose "New item: $itemShellPath" -Verbose:$Verbose
 
