@@ -230,7 +230,7 @@ function Import-ContextMenuItem([string] $JsonPath, [switch] $Verbose)
 }
 
 
-function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath)
+function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
     if ($item.$PROPERTY_OPTIONS)
     {
@@ -247,20 +247,26 @@ function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath)
                 return
             }
 
-            RemoveContextMenuItem -Item $item -ItemPath $subitemPath
+            RemoveContextMenuItem -Item $item -ItemPath $subitemPath -Verbose:$Verbose
         }
 
         Remove-Item -Path $itemShellPath
         Remove-Item -Path $ItemPath
+
+        Write-Verbose "Remove item: $itemShellPath" -Verbose:$Verbose
+        Write-Verbose "Remove item: $ItemPath" -Verbose:$Verbose
     }
     else
     {
         Remove-Item -Path $ItemPath\command
         Remove-Item -Path $ItemPath
+
+        Write-Verbose "Remove item: $ItemPath\command" -Verbose:$Verbose
+        Write-Verbose "Remove item: $ItemPath" -Verbose:$Verbose
     }
 }
 
-function Remove-ContextMenuItem([string] $JsonPath)
+function Remove-ContextMenuItem([string] $JsonPath, [switch] $Verbose)
 {
     $jsonString = Get-Content $JsonPath -Encoding utf8 -Raw
 
@@ -279,7 +285,7 @@ function Remove-ContextMenuItem([string] $JsonPath)
 
         $itemPath = "$contextMenuTypePath\$($item.$PROPERTY_KEY)"
 
-        RemoveContextMenuItem -Item $item -ItemPath $itemPath
+        RemoveContextMenuItem -Item $item -ItemPath $itemPath -Verbose:$Verbose
     }   
 }
 
