@@ -240,7 +240,7 @@ function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $V
     $itemNotExists = -not (Get-Item -Path $ItemPath -ErrorAction Ignore)
     if ($itemNotExists)
     {
-        Write-Warning "Trying to remove a non-existent path: '$ItemPath'."
+        Write-Warning "Trying to remove a non-existing path: '$ItemPath'."
         return
     }
 
