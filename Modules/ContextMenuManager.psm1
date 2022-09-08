@@ -278,6 +278,7 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
 
     # Transform the possible relative paths to absolute and get the files of the folders
     $filePaths = New-Object Collections.Generic.List[string]
+
     foreach ($path in $fileAndFolderPaths)
     {
         if ((Get-Item $path).PSIsContainer)
@@ -296,6 +297,7 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
 
     # Create one function call per json file
     $functionCalls = ""
+
     foreach ($filePath in $filePaths)
     {
         $functionCalls += "$FunctionName -JsonPath '$filePath'`n"
