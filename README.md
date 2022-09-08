@@ -54,7 +54,7 @@ Avoid changing the key because if you import the context menu, then change one k
 
 We have to different first-level items, which are the ones who aren't inside another group, these are kind of special because they have 2 properties subitems can't have:
 - **Type**: indicates where the context menu items must appear. There are 4 types:
-	> [File, Directory, Desktop, Drive]
+> [File, Directory, Desktop, Drive]
 - **Extended**: when present and set to true you have to hold *Shift* to make the item visible.
 It can be omitted in case it's false.
 
@@ -70,8 +70,10 @@ Assuming you downloaded the repository and you already have your json file(s) re
 When you want to remove the context menu just execute **Remove-ContextMenuItem.ps1**.
 Removing it's faster than importing.
 
-# Extra information
 In case your json file has a wrong format or even inappropriate keys or values it will stop executing and shows you what's the error and the specific json file (remember you can work with more than one json files).
+
+# Extra
+In case you want to know what is the manual way of creating context menus check this [medium article](https://medium.com/analytics-vidhya/creating-cascading-context-menus-with-the-windows-10-registry-f1cf3cd8398f).
 
 # Contributions
 You can contribute to this repository in case you notice any error or something that can be improve.
