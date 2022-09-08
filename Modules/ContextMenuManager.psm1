@@ -155,7 +155,7 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verb
         # Set item image
         New-ItemProperty -Path $ItemPath -Name Icon -Value $iconPath > $null
 
-        Write-Verbose "New item property: $ItemPath = $iconPath" -Verbose:$Verbose
+        Write-Verbose "New item property: '$ItemPath' = '$iconPath'" -Verbose:$Verbose
     }
 
     if ($item.$PROPERTY_OPTIONS)
@@ -169,16 +169,16 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verb
         # Create shell (container of subitems)
         $itemShellPath = (New-Item -Path $ItemPath -Name Shell).PSPath.Replace("*", "``*")
 
-        Write-Verbose "New item property: $ItemPath\MUIVerb = $($Item.$PROPERTY_NAME)" -Verbose:$Verbose
-        Write-Verbose "New item property: $ItemPath\subcommands" -Verbose:$Verbose
-        Write-Verbose "New item: $itemShellPath" -Verbose:$Verbose
+        Write-Verbose "New item property: '$ItemPath\MUIVerb' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
+        Write-Verbose "New item property: '$ItemPath\subcommands'" -Verbose:$Verbose
+        Write-Verbose "New item: '$itemShellPath'" -Verbose:$Verbose
 
         # Create subitems
         foreach ($subitem in $Item.$PROPERTY_OPTIONS)
         {
             $subitemPath = (New-Item -Path $itemShellPath -Name $subitem.$PROPERTY_KEY).PSPath.Replace("*", "``*")
 
-            Write-Verbose "New item: $itemShellPath\$($subitem.$PROPERTY_KEY)" -Verbose:$Verbose
+            Write-Verbose "New item: '$itemShellPath\$($subitem.$PROPERTY_KEY)'" -Verbose:$Verbose
 
             NewContextMenuItem -Item $subitem -ItemPath $subitemPath -Verbose:$Verbose
         }
@@ -194,9 +194,9 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verb
         # Set command value
         New-ItemProperty -LiteralPath $commandPath -Name '(default)' -Value $Item.$PROPERTY_COMMAND > $null
 
-        Write-Verbose "New item: $commandPath" -Verbose:$Verbose
-        Write-Verbose "New item property: $ItemPath\(default) = $($Item.$PROPERTY_NAME)" -Verbose:$Verbose
-        Write-Verbose "New item property: $commandPath\(default) = $($Item.$PROPERTY_COMMAND)" -Verbose:$Verbose
+        Write-Verbose "New item: '$commandPath'" -Verbose:$Verbose
+        Write-Verbose "New item property: '$ItemPath\(default)' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
+        Write-Verbose "New item property: '$commandPath\(default)' = '$($Item.$PROPERTY_COMMAND)'" -Verbose:$Verbose
     }
 }
 
@@ -220,14 +220,14 @@ function Import-ContextMenuItem([string] $JsonPath, [switch] $Verbose)
         # Create item
         $itemPath = (New-Item -Path $contextMenuTypePath -Name $item.$PROPERTY_KEY).PSPath.Replace("*", "``*")
 
-        Write-Verbose "New item: $contextMenuTypePath\$($item.$PROPERTY_KEY)" -Verbose:$Verbose
+        Write-Verbose "New item: '$contextMenuTypePath\$($item.$PROPERTY_KEY)'" -Verbose:$Verbose
 
         if ($item.$PROPERTY_EXTENDED)
         {
             # Set as extended (must hold Shift to make the option visble)
             New-ItemProperty -Path $itemPath -Name Extended > $null
 
-            Write-Verbose "New item property: $itemPath\Extended" -Verbose:$Verbose
+            Write-Verbose "New item property: '$itemPath\Extended'" -Verbose:$Verbose
         }
 
         NewContextMenuItem -Item $item -ItemPath $itemPath -Verbose:$Verbose
@@ -258,16 +258,16 @@ function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $V
         Remove-Item -Path $itemShellPath
         Remove-Item -Path $ItemPath
 
-        Write-Verbose "Remove item: $itemShellPath" -Verbose:$Verbose
-        Write-Verbose "Remove item: $ItemPath" -Verbose:$Verbose
+        Write-Verbose "Remove item: '$itemShellPath'" -Verbose:$Verbose
+        Write-Verbose "Remove item: '$ItemPath'" -Verbose:$Verbose
     }
     else
     {
         Remove-Item -Path $ItemPath\command
         Remove-Item -Path $ItemPath
 
-        Write-Verbose "Remove item: $ItemPath\command" -Verbose:$Verbose
-        Write-Verbose "Remove item: $ItemPath" -Verbose:$Verbose
+        Write-Verbose "Remove item: '$ItemPath\command'" -Verbose:$Verbose
+        Write-Verbose "Remove item: '$ItemPath'" -Verbose:$Verbose
     }
 }
 
