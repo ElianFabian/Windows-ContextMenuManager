@@ -255,16 +255,16 @@ function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $V
             RemoveContextMenuItem -Item $item -ItemPath $subitemPath -Verbose:$Verbose
         }
 
-        Remove-Item -Path $itemShellPath
-        Remove-Item -Path $ItemPath
+        Remove-Item -Path $itemShellPath -ErrorAction Ignore
+        Remove-Item -Path $ItemPath -ErrorAction Ignore
 
         Write-Verbose "Remove item: '$itemShellPath'" -Verbose:$Verbose
         Write-Verbose "Remove item: '$ItemPath'" -Verbose:$Verbose
     }
     else
     {
-        Remove-Item -Path $ItemPath\command
-        Remove-Item -Path $ItemPath
+        Remove-Item -Path $ItemPath\command -ErrorAction Ignore
+        Remove-Item -Path $ItemPath -ErrorAction Ignore
 
         Write-Verbose "Remove item: '$ItemPath\command'" -Verbose:$Verbose
         Write-Verbose "Remove item: '$ItemPath'" -Verbose:$Verbose
