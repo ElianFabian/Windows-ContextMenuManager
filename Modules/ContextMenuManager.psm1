@@ -100,7 +100,7 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
                 {
                     $value = $item.$PROPERTY_TYPE
 
-                    if (-not ($contextMenuTypePaths.Keys -ccontains $value))
+                    if (-not ($contextMenuTypePaths.Keys -contains $value))
                     {
                         WriteError "'$value' is not a valid value for the 'Type' property at:`n$JsonPath.`n`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
                         return $false
