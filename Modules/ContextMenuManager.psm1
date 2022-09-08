@@ -64,8 +64,11 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
 {
     $isValid = $true
 
+    $sameLevelItemKeys = new-Object System.Collections.Generic.HashSet[string]
+
     foreach ($item in $Items)
     {
+
         foreach ($propertyName in $item.PSObject.Properties.Name)
         {
             if (-not ($VALID_PROPERTY_SET.Contains($propertyName)))
@@ -76,6 +79,16 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
 
             switch ($propertyName)
             {
+                $PROPERTY_KEY
+                {
+                    $keyValue = $item.$PROPERTY_KEY
+                    
+                    if ( -not $sameLevelItemKeys.Add($keyValue))
+                    {
+                        Write-Error "'$keyValue' is a repeated key at: $JsonPath`nKeys must be unique in the same level of depth."
+                        return $false
+                    }
+                }
                 $PROPERTY_TYPE
                 {
                     $typeValue = $item.$PROPERTY_TYPE
