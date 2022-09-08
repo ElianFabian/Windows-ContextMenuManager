@@ -42,6 +42,14 @@ $VALID_PROPERTY_SET = @("Key", "Name", "Type", "Command", "Options", "Extended",
 $CONTEXT_MENU_LIST_PATH = Resolve-Path $settings.CONTEXT_MENU_LIST_PATH -ErrorAction Ignore
 
 
+
+function WriteError($Message) 
+{
+    [Console]::ForegroundColor = 'Red'
+    [Console]::Error.WriteLine($Message)
+    [Console]::ResetColor()
+}
+
 function IsRunningAsAdministrator()
 {
     $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
@@ -68,12 +76,11 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
 
     foreach ($item in $Items)
     {
-
         foreach ($propertyName in $item.PSObject.Properties.Name)
         {
             if (-not ($VALID_PROPERTY_SET.Contains($propertyName)))
             {
-                Write-Error "'$propertyName' is not a valid item property name at: '$JsonPath'.`nThis is the valid set from settings.ini: [$($VALID_PROPERTY_SET -join ', ')] " -Category InvalidData
+                WriteError "'$propertyName' is not a valid item property name at:`n$JsonPath`n`nThis is the valid set from settings.ini: [$($VALID_PROPERTY_SET -join ', ')] " -Category InvalidData
                 return $false
             }
 
@@ -85,7 +92,7 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
                     
                     if ( -not $sameLevelItemKeys.Add($value))
                     {
-                        Write-Error "'$value' is a repeated key at: $JsonPath`nKeys must be unique in the same level of depth."
+                        WriteError "'$value' is a repeated key at:`n$JsonPath`n`nKeys must be unique in the same level of depth."
                         return $false
                     }
                 }
@@ -95,7 +102,7 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
 
                     if (-not ($contextMenuTypePaths.Keys -ccontains $value))
                     {
-                        Write-Error "'$value' is not a valid value for the 'Type' property at: '$JsonPath'.`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
+                        WriteError "'$value' is not a valid value for the 'Type' property at:`n$JsonPath.`n`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
                         return $false
                     }
                 }
@@ -105,7 +112,7 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
     
                     if (-not (Test-Path $value))
                     {
-                        Write-Error "'$value' is not an existing path at: $JsonPath"
+                        WriteError "'$value' is not an existing file at:`n$JsonPath"
                         return $false
                     }
                 }
@@ -121,12 +128,12 @@ function TestErrorsBeforeAction([string] $JsonString, [psobject] $JsonObject, [s
 {
     if (-not (IsRunningAsAdministrator))
     {
-        Write-Error "Script must run as administrator."
+        WriteError "Script must run as administrator."
         return $false
     }
     if (-not (TestJsonString $JsonString))
     {
-        Write-Error "Wrong format in json file: $JsonPath" -Category InvalidData
+        WriteError "Wrong format in json file: $JsonPath" -Category InvalidData
         return $false
     }
     if (-not (TestJsonObjectKeyNamesAndValues -Items $JsonObject -JsonPath $JsonPath))
