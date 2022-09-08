@@ -183,7 +183,7 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath)
     }
 }
 
-function Add-ContextMenuItem([string] $JsonPath)
+function Import-ContextMenuItem([string] $JsonPath)
 {
     $jsonString = Get-Content $JsonPath -Encoding utf8 -Raw
 
