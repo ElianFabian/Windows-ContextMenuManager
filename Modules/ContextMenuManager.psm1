@@ -81,31 +81,31 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
             {
                 $PROPERTY_KEY
                 {
-                    $keyValue = $item.$PROPERTY_KEY
+                    $value = $item.$PROPERTY_KEY
                     
-                    if ( -not $sameLevelItemKeys.Add($keyValue))
+                    if ( -not $sameLevelItemKeys.Add($value))
                     {
-                        Write-Error "'$keyValue' is a repeated key at: $JsonPath`nKeys must be unique in the same level of depth."
+                        Write-Error "'$value' is a repeated key at: $JsonPath`nKeys must be unique in the same level of depth."
                         return $false
                     }
                 }
                 $PROPERTY_TYPE
                 {
-                    $typeValue = $item.$PROPERTY_TYPE
+                    $value = $item.$PROPERTY_TYPE
 
-                    if (-not ($contextMenuTypePaths.Keys -ccontains $typeValue))
+                    if (-not ($contextMenuTypePaths.Keys -ccontains $value))
                     {
-                        Write-Error "'$typeValue' is not a valid value for the 'Type' property at: '$JsonPath'.`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
+                        Write-Error "'$value' is not a valid value for the 'Type' property at: '$JsonPath'.`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
                         return $false
                     }
                 }
                 $PROPERTY_ICON
                 {
-                    $iconValue = $item.$PROPERTY_ICON
+                    $value = $item.$PROPERTY_ICON
     
-                    if (-not (Test-Path $iconValue))
+                    if (-not (Test-Path $value))
                     {
-                        Write-Error "'$iconValue' is not an existing path at: $JsonPath"
+                        Write-Error "'$value' is not an existing path at: $JsonPath"
                         return $false
                     }
                 }
