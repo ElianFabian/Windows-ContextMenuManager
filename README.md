@@ -32,7 +32,7 @@ In case you have setup your directory and executes the script, it won't override
 	    "Icon" : "an/Arbitrary/Path.ico"
 	    "Options" : [...]
 	},
-	// Command Item
+	// Command item
 	{
 	    "Key" : "command_utils",
 	    "Name" : "Command Utils"
