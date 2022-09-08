@@ -141,7 +141,7 @@ function TestErrorsBeforeAction([string] $JsonString, [psobject] $JsonObject, [s
 }
 
 
-function NewContextMenuItem([psobject] $Item, [string] $ItemPath)
+function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
     if ($Item.$PROPERTY_ICON)
     {
@@ -149,6 +149,8 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath)
 
         # Set item image
         New-ItemProperty -Path $ItemPath -Name Icon -Value $iconPath > $null
+
+        Write-Verbose "New item property: $ItemPath = $iconPath" -Verbose:$Verbose
     }
 
     if ($item.$PROPERTY_OPTIONS)
@@ -162,12 +164,18 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath)
         # Create shell (container of subitems)
         $itemShellPath = (New-Item -Path $ItemPath -Name Shell).PSPath.Replace("*", "``*")
 
-        # Create subitem
+        Write-Verbose "New item property: $ItemPath\MUIVerb = $($Item.$PROPERTY_NAM)" -Verbose:$Verbose
+        Write-Verbose "New item property: $ItemPath\subcommands" -Verbose:$Verbose
+        Write-Verbose "New item: $itemShellPath" -Verbose:$Verbose
+
+        # Create subitems
         foreach ($subitem in $Item.$PROPERTY_OPTIONS)
         {
             $subitemPath = (New-Item -Path $itemShellPath -Name $subitem.$PROPERTY_KEY).PSPath.Replace("*", "``*")
 
-            NewContextMenuItem -Item $subitem -ItemPath $subitemPath
+            Write-Verbose "New item: $itemShellPath\$($subitem.$PROPERTY_KEY)" -Verbose:$Verbose
+
+            NewContextMenuItem -Item $subitem -ItemPath $subitemPath -Verbose:$Verbose
         }
     }
     else
@@ -180,10 +188,14 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath)
 
         # Set command value
         New-ItemProperty -LiteralPath $commandPath -Name '(default)' -Value $Item.$PROPERTY_COMMAND > $null
+
+        Write-Verbose "New item: $commandPath" -Verbose:$Verbose
+        Write-Verbose "New item property: $ItemPath\(default) = $($Item.$PROPERTY_NAME)" -Verbose:$Verbose
+        Write-Verbose "New item property: $commandPath\(default) = $($Item.$PROPERTY_COMMAND)" -Verbose:$Verbose
     }
 }
 
-function Import-ContextMenuItem([string] $JsonPath)
+function Import-ContextMenuItem([string] $JsonPath, [switch] $Verbose)
 {
     $jsonString = Get-Content $JsonPath -Encoding utf8 -Raw
 
@@ -203,13 +215,17 @@ function Import-ContextMenuItem([string] $JsonPath)
         # Create item
         $itemPath = (New-Item -Path $contextMenuTypePath -Name $item.$PROPERTY_KEY).PSPath.Replace("*", "``*")
 
+        Write-Verbose "New item: $contextMenuTypePath\$($item.$PROPERTY_KEY)" -Verbose:$Verbose
+
         if ($item.$PROPERTY_EXTENDED)
         {
             # Set as extended (must hold Shift to make the option visble)
             New-ItemProperty -Path $itemPath -Name Extended > $null
+
+            Write-Verbose "New item property: $itemPath\Extended" -Verbose:$Verbose
         }
 
-        NewContextMenuItem -Item $item -ItemPath $itemPath
+        NewContextMenuItem -Item $item -ItemPath $itemPath -Verbose:$Verbose
     }
 }
 
