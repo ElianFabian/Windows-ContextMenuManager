@@ -237,6 +237,13 @@ function Import-ContextMenuItem([string] $JsonPath, [switch] $Verbose)
 
 function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
+    $itemNotExists = -not (Get-Item -Path $ItemPath -ErrorAction Ignore)
+    if ($itemNotExists)
+    {
+        Write-Warning "Trying to remove a non-existent path: '$ItemPath'."
+        return
+    }
+
     if ($item.$PROPERTY_OPTIONS)
     {
         $itemShellPath = "$ItemPath\Shell"
@@ -244,13 +251,6 @@ function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $V
         foreach ($item in $item.$PROPERTY_OPTIONS)
         {
             $subitemPath = "$itemShellPath\$($item.$PROPERTY_KEY)"
-
-            $itemNotExists = -not (Get-Item -Path $subitemPath -ErrorAction Ignore)
-            if ($itemNotExists)
-            {
-                Write-Warning "Trying to remove a non-existent path: '$subitemPath'."
-                return
-            }
 
             RemoveContextMenuItem -Item $item -ItemPath $subitemPath -Verbose:$Verbose
         }
