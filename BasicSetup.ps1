@@ -36,9 +36,14 @@ PROPERTY_OPTIONS =Options
 PROPERTY_EXTENDED=Extended
 PROPERTY_ICON    =Icon
 
-CONTEXT_MENU_LIST_PATH=./$contextMenuListFilename
+CONTEXT_MENU_LIST_PATH=./context-menu-list.txt
 
+# If true shows information about what is happening when importing or removing
 VERBOSE=false
+
+# If true when you execute the import ot remove script it will not close automatically
+CONSOLE_NO_EXIT=false
+
 "@
 
 New-Item -Path "settings.ini" -Value $settingsDefaultContent -ErrorAction Ignore
