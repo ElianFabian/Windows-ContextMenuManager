@@ -86,9 +86,7 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
 
             switch ($propertyName)
             {
-                $PROPERTY_KEY
-                {
-                    $value = $item.$PROPERTY_KEY
+                $PROPERTY_KEY { $value = $item.$PROPERTY_KEY
 
                     if ( -not $sameLevelItemKeys.Add($value))
                     {
@@ -96,19 +94,15 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
                         return $false
                     }
                 }
-                $PROPERTY_TYPE
-                {
-                    $value = $item.$PROPERTY_TYPE
-
+                $PROPERTY_TYPE { $value = $item.$PROPERTY_TYPE
+                    
                     if (-not ($contextMenuTypePaths.Keys -contains $value))
                     {
                         WriteError "'$value' is not a valid value for the 'Type' property at:`n$JsonPath.`n`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
                         return $false
                     }
                 }
-                $PROPERTY_ICON
-                {
-                    $value = $item.$PROPERTY_ICON
+                $PROPERTY_ICON { $value = $item.$PROPERTY_ICON
 
                     if (-not (Test-Path $value))
                     {
