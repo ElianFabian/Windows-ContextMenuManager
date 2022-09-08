@@ -54,7 +54,7 @@ Avoid changing the key because if you import the context menu, then change one k
 
 We have to different first-level items, which are the ones who aren't inside another group, these are kind of special because they have 2 properties subitems can't have:
 - **Type**: indicates where the context menu items must appear. There are 4 types:
-	> [File, Directory, Desktop, Drive]
+> [File, Directory, Desktop, Drive]
 - **Extended**: when present and set to true you have to hold *Shift* to make the item visible.
 It can be omitted in case it's false.
 
