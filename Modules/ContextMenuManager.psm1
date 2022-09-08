@@ -84,33 +84,35 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
                 return $false
             }
 
+            $propertyValue = $item.$propertyName
+
             switch ($propertyName)
             {
-                $PROPERTY_KEY { $value = $item.$PROPERTY_KEY
-
-                    if ( -not $sameLevelItemKeys.Add($value))
+                $PROPERTY_KEY
+                {
+                    if ( -not $sameLevelItemKeys.Add($propertyValue))
                     {
-                        WriteError "'$value' is a repeated key at:`n$JsonPath`n`nKeys must be unique in the same level of depth."
+                        WriteError "'$propertyValue' is a repeated key at:`n$JsonPath`n`nKeys must be unique in the same level of depth."
                         return $false
                     }
                 }
-                $PROPERTY_TYPE { $value = $item.$PROPERTY_TYPE
-                    
-                    if (-not ($contextMenuTypePaths.Keys -contains $value))
+                $PROPERTY_TYPE
+                {
+                    if (-not ($contextMenuTypePaths.Keys -contains $propertyValue))
                     {
-                        WriteError "'$value' is not a valid value for the 'Type' property at:`n$JsonPath.`n`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
+                        WriteError "'$propertyValue' is not a valid value for the 'Type' property at:`n$JsonPath.`n`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
                         return $false
                     }
                 }
-                $PROPERTY_ICON { $value = $item.$PROPERTY_ICON
-
-                    if (-not (Test-Path $value))
+                $PROPERTY_ICON
+                {
+                    if (-not (Test-Path $propertyValue))
                     {
-                        WriteError "'$value' is not an existing file at:`n$JsonPath"
+                        WriteError "'$propertyValue' is not an existing file at:`n$JsonPath"
                         return $false
                     }
                 }
-                $PROPERTY_OPTIONS { $isValid = TestJsonObjectKeyNamesAndValues -Items $item.$PROPERTY_OPTIONS -JsonPath $JsonPath }
+                $PROPERTY_OPTIONS { $isValid = TestJsonObjectKeyNamesAndValues -Items $propertyValue -JsonPath $JsonPath }
             }
         }
     }
