@@ -89,7 +89,7 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
                 $PROPERTY_KEY
                 {
                     $value = $item.$PROPERTY_KEY
-                    
+
                     if ( -not $sameLevelItemKeys.Add($value))
                     {
                         WriteError "'$value' is a repeated key at:`n$JsonPath`n`nKeys must be unique in the same level of depth."
@@ -109,7 +109,7 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
                 $PROPERTY_ICON
                 {
                     $value = $item.$PROPERTY_ICON
-    
+
                     if (-not (Test-Path $value))
                     {
                         WriteError "'$value' is not an existing file at:`n$JsonPath"
