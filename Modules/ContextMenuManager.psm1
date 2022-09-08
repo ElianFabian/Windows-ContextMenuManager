@@ -71,21 +71,32 @@ function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
             if (-not ($VALID_PROPERTY_SET.Contains($propertyName)))
             {
                 Write-Error "'$propertyName' is not a valid item property name at: '$JsonPath'.`nThis is the valid set from settings.ini: [$($VALID_PROPERTY_SET -join ', ')] " -Category InvalidData
-                $isValid = $false
+                return $false
             }
-            if ($propertyName -eq $PROPERTY_TYPE)
-            {
-                $typeValue = $item.$PROPERTY_TYPE
 
-                if (-not ($contextMenuTypePaths.Keys -ccontains $typeValue))
-                {
-                    Write-Error "'$typeValue' is not a valid value for the 'Type' property at: '$JsonPath'.`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
-                    $isValid = $false
-                }
-            }
-            if ($propertyName -eq $PROPERTY_OPTIONS)
+            switch ($propertyName)
             {
-                $isValid = TestJsonObjectKeyNamesAndValues -Items $item.$PROPERTY_OPTIONS -JsonPath $JsonPath
+                $PROPERTY_TYPE
+                {
+                    $typeValue = $item.$PROPERTY_TYPE
+
+                    if (-not ($contextMenuTypePaths.Keys -ccontains $typeValue))
+                    {
+                        Write-Error "'$typeValue' is not a valid value for the 'Type' property at: '$JsonPath'.`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
+                        return $false
+                    }
+                }
+                $PROPERTY_ICON
+                {
+                    $iconValue = $item.$PROPERTY_ICON
+    
+                    if (-not (Test-Path $iconValue))
+                    {
+                        Write-Error "'$iconValue' is not an existing path at: $JsonPath"
+                        return $false
+                    }
+                }
+                $PROPERTY_OPTIONS { $isValid = TestJsonObjectKeyNamesAndValues -Items $item.$PROPERTY_OPTIONS -JsonPath $JsonPath }
             }
         }
     }
