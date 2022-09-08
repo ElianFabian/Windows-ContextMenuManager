@@ -1,0 +1,49 @@
+[
+    {
+        "Key" : "file_utils",
+        "Name" : "File Utils",
+        "Type" : "File",
+        "Extended" : true,
+        "Icon" : "C:/Program Files/internet explorer/images/bing.ico",
+        "Options" : [
+            {
+                "Key" : "read_content",
+                "Name" : "Read content",
+                "Icon" : "C:/Program Files/internet explorer/images/bing.ico",
+                "Command" : "powershell.exe -NoExit -Command Get-Content '%1'"
+            },
+            {
+                "Key" : "remove_content",
+                "Name" : "Remove content",
+                "Icon" : "C:/Program Files/internet explorer/images/bing.ico",
+                "Command" : "powershell.exe -Command Set-Content %1 -Value ''"
+            },
+            {
+                "Key" : "subutils",
+                "Name" : "SubUtils",
+                "Icon" : "C:/Program Files/internet explorer/images/bing.ico",
+                "Options" : [
+                    {
+                        "Key" : "nothing",
+                        "Name" : "Press me! Nothing won't happen.",
+                        "Icon" : "C:/Program Files/internet explorer/images/bing.ico"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "Key" : "get_size_of_all_files",
+        "Name" : "Get size of folder",
+        "Type" : "Directory",
+        "Icon" : "C:/Program Files/internet explorer/images/bing.ico",
+        "Command" : "powershell.exe -NoExit -Command (Get-ChildItem -File) | ForEach-Object { $total = 0 } { $total += $_.Length } { $total }"
+    },
+    {
+        "Key" : "get_number_of_characters",
+        "Name" : "Get number of characters",
+        "Type" : "File",
+        "Icon" : "C:/Program Files/internet explorer/images/bing.ico",
+        "Command" : "powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length"
+    }
+]
