@@ -37,6 +37,8 @@ PROPERTY_EXTENDED=Extended
 PROPERTY_ICON    =Icon
 
 CONTEXT_MENU_LIST_PATH=./$contextMenuListFilename
+
+VERBOSE=false
 "@
 
 New-Item -Path "settings.ini" -Value $settingsDefaultContent -ErrorAction Ignore

@@ -13,7 +13,8 @@ $contextMenuTypePaths = @{
 $settingsFile = "../settings.ini"
 $settings     = (Get-Content -Path "$PSScriptRoot/$settingsFile" -Encoding utf8) | ConvertFrom-StringData
 
-# Set the property names that the json files use
+#region settings.ini
+
 $PROPERTY_KEY      = $settings.PROPERTY_KEY
 $PROPERTY_NAME     = $settings.PROPERTY_NAME
 $PROPERTY_TYPE     = $settings.PROPERTY_TYPE
@@ -33,6 +34,10 @@ foreach ($propertyName in $settings.PSObject.Properties.Name)
 }
 
 $VALID_PROPERTY_SET = @("Key", "Name", "Type", "Command", "Options", "Extended", "Icon")
+
+$USE_VERBOSE = [System.Convert]::ToBoolean($settings.VERBOSE)
+
+#endregion
 
 
 # This expression throws an error when the administrator console is open because the current directory is different
@@ -317,12 +322,14 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
         }
     }
 
+    $verboseString = if ($USE_VERBOSE) { "-Verbose"} else { "" }
+
     # Create one function call per json file
     $functionCalls = ""
 
     foreach ($filePath in $filePaths)
     {
-        $functionCalls += "$FunctionName -JsonPath '$filePath'`n"
+        $functionCalls += "$FunctionName -JsonPath '$filePath' $verboseString`n"
     }
 
     $command = @(
