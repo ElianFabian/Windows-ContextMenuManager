@@ -218,7 +218,7 @@ function Import-ContextMenuItem([string] $JsonPath, [switch] $Verbose)
         $contextMenuTypePath = $contextMenuTypePaths.$($item.$PROPERTY_TYPE)
 
         # Create item
-        $itemPath = (New-Item -Path $contextMenuTypePath -Name $item.$PROPERTY_KEY).PSPath.Replace("*", "``*")
+        $itemPath = (New-Item -Path $contextMenuTypePath -Name $item.$PROPERTY_KEY -ErrorAction Stop).PSPath.Replace("*", "``*")
 
         Write-Verbose "New item: '$contextMenuTypePath\$($item.$PROPERTY_KEY)'" -Verbose:$Verbose
 
