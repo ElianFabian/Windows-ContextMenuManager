@@ -10,8 +10,20 @@ $contextMenuTypePaths = @{
     Drive     = "$basePath\Drive\shell"
 }
 
-$settingsFile = "../settings.ini"
-$settings     = (Get-Content -Path "$PSScriptRoot/$settingsFile" -Encoding utf8) | ConvertFrom-StringData
+$settingsFile = "settings.ini"
+
+if (-not (Test-Path $PSScriptRoot\..\$settingsFile))
+{
+    $parentDirectory = Resolve-Path $PSScriptRoot\..
+
+    Write-Error "Couldn't find the '$parentDirectory\$settingsFile' file."
+    Start-Sleep -Seconds 50
+    exit
+}
+
+$settings = (Get-Content -Path "$PSScriptRoot\..\$settingsFile" -Encoding utf8) | ConvertFrom-StringData
+
+
 
 #region settings.ini
 
@@ -36,6 +48,7 @@ foreach ($propertyName in $settings.PSObject.Properties.Name)
 $VALID_PROPERTY_SET = @("Key", "Name", "Type", "Command", "Options", "Extended", "Icon")
 
 $CONSOLE_VERBOSE = [System.Convert]::ToBoolean($settings.CONSOLE_VERBOSE)
+$CONSOLE_NO_EXIT = [System.Convert]::ToBoolean($settings.CONSOLE_NO_EXIT)
 
 #endregion
 
@@ -322,14 +335,14 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
         }
     }
 
-    $verboseString = if ($CONSOLE_VERBOSE) { "-Verbose"} else { "" }
+    $verboseArg = if ($CONSOLE_VERBOSE) { "-Verbose" } else { "" }
 
     # Create one function call per json file
     $functionCalls = ""
 
     foreach ($filePath in $filePaths)
     {
-        $functionCalls += "$FunctionName -JsonPath '$filePath' $verboseString`n"
+        $functionCalls += "$FunctionName -JsonPath '$filePath' $verboseArg`n"
     }
 
     $command = @(
@@ -338,7 +351,9 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
         $functionCalls
     ) -join "`n"
 
-    Start-Process -Verb RunAs -Path Powershell -ArgumentList "$ArgumentList -Command $command"
+    $noExitArg = if ($CONSOLE_NO_EXIT) { "-NoExit" } else { "" }
+
+    Start-Process -Verb RunAs -Path Powershell -ArgumentList "$noExitArg $ArgumentList -Command $command"
 }
 
 
