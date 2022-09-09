@@ -35,7 +35,7 @@ foreach ($propertyName in $settings.PSObject.Properties.Name)
 
 $VALID_PROPERTY_SET = @("Key", "Name", "Type", "Command", "Options", "Extended", "Icon")
 
-$USE_VERBOSE = [System.Convert]::ToBoolean($settings.VERBOSE)
+$CONSOLE_VERBOSE = [System.Convert]::ToBoolean($settings.CONSOLE_VERBOSE)
 
 #endregion
 
@@ -322,7 +322,7 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
         }
     }
 
-    $verboseString = if ($USE_VERBOSE) { "-Verbose"} else { "" }
+    $verboseString = if ($CONSOLE_VERBOSE) { "-Verbose"} else { "" }
 
     # Create one function call per json file
     $functionCalls = ""
