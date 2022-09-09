@@ -334,7 +334,7 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
 
     $command = @(
         "Import-Module -Name '$PSCommandPath'",
-        "Write-Host $Message -ForegroundColor Green",
+        "Write-Host '$Message' -ForegroundColor Green",
         $functionCalls
     ) -join "`n"
 
