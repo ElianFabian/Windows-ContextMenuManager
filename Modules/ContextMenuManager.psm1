@@ -338,7 +338,7 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
         $functionCalls
     ) -join "`n"
 
-    Start-Process -Verb RunAs -Path Powershell -ArgumentList "$ArgumentList -NonInteractive -Command $command"
+    Start-Process -Verb RunAs -Path Powershell -ArgumentList "$ArgumentList -Command $command"
 }
 
 
