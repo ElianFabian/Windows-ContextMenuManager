@@ -25,7 +25,7 @@
                 "Options" : [
                     {
                         "Key" : "nothing",
-                        "Name" : "Press me! Nothing won't happen.",
+                        "Name" : "Press me! Nothing will happen.",
                         "Icon" : "C:/Program Files/internet explorer/images/bing.ico"
                     }
                 ]
