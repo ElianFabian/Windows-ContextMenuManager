@@ -17,6 +17,9 @@
 #    and use create the ones you want, and then add their paths
 #    to "context-menu-items.txt".
 #
+# - context-menu-items.xml:
+#    The same as context-menu-items.json but in xml.
+#
 # The "Source" folder is actually not required, it's only to store the json but you can change it in "context-menu-list.txt"
 
 # If the generated files already exists they won't be overriden.
@@ -24,11 +27,11 @@
 
 $sourceFileName          = "Source"
 $contextMenuListFilename = "context-menu-list.txt"
-$defaultContextMenuJson  = "context-menu-items.json"
+$defaultContextMenuBasename = "context-menu-items"
 
 # Create settings.ini ------------------------------------------------------------------------------
 $settingsDefaultContent = @"
-# Names of the json properties
+# Names of the context menu properties
 PROPERTY_KEY     =Key
 PROPERTY_NAME    =Name
 PROPERTY_TYPE    =Type
@@ -65,7 +68,7 @@ New-Item -Path $contextMenuListFilename -Value $contextMenuListFileContent -Erro
 
 
 # Create default json template ------------------------------------------------------------------------------
-$contextMenuTemplateContent = @"
+$contextMenuTemplateJsonContent = @"
 [
     {
         "Key" : "file_utils",
@@ -119,4 +122,58 @@ $contextMenuTemplateContent = @"
 "@
 
 New-Item -Path $sourceFileName -ItemType Directory -ErrorAction Ignore
-New-Item -Path $sourceFileName/$defaultContextMenuJson -Value $contextMenuTemplateContent -ErrorAction Ignore
+New-Item -Path "$sourceFileName/$defaultContextMenuBasename.json" -Value $contextMenuTemplateJsonContent -ErrorAction Ignore
+
+
+# Create default xml template ------------------------------------------------------------------------------
+$contextMenuTemplateXmlContent = @"
+<Root>
+    <Item
+        Key="file_utils"
+        Name="File Utils"
+        Icon="C:/Program Files/internet explorer/images/bing.ico"
+        Extended="true"
+        Type="File"
+    >
+        <Item
+            Key="read_content"
+            Name="Read content"
+            Icon="C:/Program Files/internet explorer/images/bing.ico"
+            Command="powershell.exe -NoExit -Command Get-Content '%1'"
+        />
+        <Item
+            Key="remove_content"
+            Name="Remove content"
+            Icon="C:/Program Files/internet explorer/images/bing.ico"
+            Command="powershell.exe -Command Set-Content %1 -Value ''"
+        />
+        <Item
+            Key="subutils"
+            Name="Get size of folder"
+            Icon="C:/Program Files/internet explorer/images/bing.ico"
+        >
+            <Item
+                Key="nothing"
+                Name="Press me! Nothing will happen."
+                Icon="C:/Program Files/internet explorer/images/bing.ico"
+            />
+        </Item>
+    </Item>
+    <Item
+        Key="get_size_of_all_files"
+        Name="Get size of folder"
+        Icon="C:/Program Files/internet explorer/images/bing.ico"
+        Type="Directory"
+        Command="powershell.exe -NoExit -Command (Get-ChildItem -File) | ForEach-Object { `$total = 0 } { `$total += `$_.Length } { `$total }"
+    />
+    <Item
+        Key="get_number_of_characters"
+        Name="Get number of characters"
+        Icon="C:/Program Files/internet explorer/images/bing.ico"
+        Type="File"
+        Command="powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length" />
+</Root>
+
+"@
+
+New-Item -Path "$sourceFileName/$defaultContextMenuBasename.xml" -Value $contextMenuTemplateXmlContent -ErrorAction Ignore

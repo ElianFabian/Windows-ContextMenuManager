@@ -1,4 +1,5 @@
-# https://medium.com/analytics-vidhya/creating-cascading-context-menus-with-the-windows-10-registry-f1cf3cd8398f
+# ContextMenuManager.psm1
+
 
 
 $basePath = "Registry::HKEY_CLASSES_ROOT"
@@ -9,6 +10,9 @@ $contextMenuTypePaths = @{
     Desktop   = "$basePath\Directory\background\shell"
     Drive     = "$basePath\Drive\shell"
 }
+
+
+#region settings.ini
 
 $settingsFile = "settings.ini"
 
@@ -22,10 +26,6 @@ if (-not (Test-Path $PSScriptRoot\..\$settingsFile))
 }
 
 $settings = Get-Content -Path "$PSScriptRoot\..\$settingsFile" -Encoding utf8 | ConvertFrom-StringData
-
-
-
-#region settings.ini
 
 $PROPERTY_KEY      = $settings.PROPERTY_KEY
 $PROPERTY_NAME     = $settings.PROPERTY_NAME
@@ -48,115 +48,64 @@ foreach ($propertyName in $settings.Keys)
 $CONSOLE_VERBOSE = [System.Convert]::ToBoolean($settings.CONSOLE_VERBOSE)
 $CONSOLE_NO_EXIT = [System.Convert]::ToBoolean($settings.CONSOLE_NO_EXIT)
 
-
-#endregion
-
-
 # This expression throws an error when the administrator console is open because the current directory is different
 # and then the relative path of this file fails
 # But actully it doesn't matter because this file is not requiered in that context
 # So we just ignore the error
 $CONTEXT_MENU_LIST_PATH = Resolve-Path $settings.CONTEXT_MENU_LIST_PATH -ErrorAction Ignore
 
+#endregion
 
+#region Object manipulation
 
-function WriteError($Message) 
+function ConvertXmlObjectToJsonObject($XmlRoot)
 {
-    [Console]::ForegroundColor = 'Red'
-    [Console]::Error.WriteLine($Message)
-    [Console]::ResetColor()
-}
+    $itemArray = New-Object System.Collections.Generic.List[PSCustomObject]
 
-function IsRunningAsAdministrator()
-{
-    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-    
-    return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-}
-
-function TestJsonString($JsonString)
-{
-    try
+    foreach ($child in $XmlRoot.ChildNodes)
     {
-        ConvertFrom-Json $JsonString -ErrorAction Stop > $null
+        $jsonItem = [PSCustomObject]@{}
 
-        return $true
-    }
-    catch { return $false }
-}
-
-function TestJsonObjectKeyNamesAndValues([array] $Items, [string] $JsonPath)
-{
-    $isValid = $true
-
-    $sameLevelItemKeys = new-Object System.Collections.Generic.HashSet[string]
-
-    foreach ($item in $Items)
-    {
-        foreach ($propertyName in $item.PSObject.Properties.Name)
+        foreach ($attribute in $child.Attributes)
         {
-            if (-not ($VALID_PROPERTY_SET.Contains($propertyName)))
-            {
-                WriteError "'$propertyName' is not a valid item property name at:`n$JsonPath`n`nThis is the valid set from settings.ini: [$($VALID_PROPERTY_SET -join ', ')] " -Category InvalidData
-                return $false
-            }
+            Add-Member -InputObject $jsonItem -Name $attribute.Name -Value $attribute.'#text' -MemberType NoteProperty
+        }
 
-            $propertyValue = $item.$propertyName
+        $itemArray.Add($jsonItem)
 
-            switch ($propertyName)
-            {
-                $PROPERTY_KEY
-                {
-                    if ( -not $sameLevelItemKeys.Add($propertyValue))
-                    {
-                        WriteError "'$propertyValue' is a repeated key at:`n$JsonPath`n`nKeys must be unique in the same level of depth."
-                        return $false
-                    }
-                }
-                $PROPERTY_TYPE
-                {
-                    if (-not ($contextMenuTypePaths.Keys -contains $propertyValue))
-                    {
-                        WriteError "'$propertyValue' is not a valid value for the 'Type' property at:`n$JsonPath.`n`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
-                        return $false
-                    }
-                }
-                $PROPERTY_ICON
-                {
-                    if (-not (Test-Path $propertyValue))
-                    {
-                        WriteError "'$propertyValue' is not an existing file at:`n$JsonPath"
-                        return $false
-                    }
-                }
-                $PROPERTY_OPTIONS { $isValid = TestJsonObjectKeyNamesAndValues -Items $propertyValue -JsonPath $JsonPath }
-            }
+        if ($child.HasChildNodes)
+        { 
+            Add-Member -InputObject $jsonItem -Name $PROPERTY_OPTIONS -Value (ConvertXmlObjectToJsonObject $child) -MemberType NoteProperty
         }
     }
 
-    return $isValid
+    return $itemArray
 }
 
-function TestErrorsBeforeAction([string] $JsonString, [psobject] $JsonObject, [string] $JsonPath)
+function GetObjectFromJsonOrXml($Path)
 {
-    if (-not (IsRunningAsAdministrator))
+    $fileExtension = [System.IO.Path]::GetExtension($Path)
+
+    $fileContent = Get-Content $Path -Encoding utf8 -Raw
+
+    $object = switch ($fileExtension)
     {
-        WriteError "Script must run as administrator."
-        return $false
-    }
-    if (-not (TestJsonString $JsonString))
-    {
-        WriteError "Wrong format in json file: $JsonPath" -Category InvalidData
-        return $false
-    }
-    if (-not (TestJsonObjectKeyNamesAndValues -Items $JsonObject -JsonPath $JsonPath))
-    {
-        return $false
+        .json { $fileContent | ConvertFrom-Json }
+        .xml { ConvertXmlObjectToJsonObject -XmlRoot ([xml]($fileContent)).DocumentElement }
+        default { Write-Error "$Path file type not supported." }
     }
 
-    return $true
+    if (-not (TestFileContentErrors_WriteError -Path $Path -Content $fileContent -Object $object))
+    {
+        return $null
+    }
+
+    return $object
 }
 
+#endregion
+
+#region Registry manipulation
 
 function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
@@ -212,18 +161,9 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verb
     }
 }
 
-function Import-ContextMenuItem([string] $JsonPath, [switch] $Verbose)
+function Import-ContextMenuItem([string] $Path, [switch] $Verbose)
 {
-    $jsonString = Get-Content $JsonPath -Encoding utf8 -Raw
-
-    $contextMenuItemsJson = $jsonString | ConvertFrom-Json
-
-    if (-not (TestErrorsBeforeAction -JsonString $jsonString -JsonObject $contextMenuItemsJson -JsonPath $JsonPath))
-    {
-        # Allows the user the read the error message
-        Start-Sleep -Seconds 50
-        return
-    }
+    $contextMenuItemsJson = GetObjectFromJsonOrXml -Path $Path
 
     foreach ($item in $contextMenuItemsJson)
     {
@@ -245,7 +185,6 @@ function Import-ContextMenuItem([string] $JsonPath, [switch] $Verbose)
         NewContextMenuItem -Item $item -ItemPath $itemPath -Verbose:$Verbose
     }
 }
-
 
 function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
@@ -283,18 +222,9 @@ function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $V
     }
 }
 
-function Remove-ContextMenuItem([string] $JsonPath, [switch] $Verbose)
+function Remove-ContextMenuItem([string] $Path, [switch] $Verbose)
 {
-    $jsonString = Get-Content $JsonPath -Encoding utf8 -Raw
-
-    $contextMenuItemsJson = $jsonString | ConvertFrom-Json
-
-    if (-not (TestErrorsBeforeAction -JsonString $jsonString -JsonObject $contextMenuItemsJson -JsonPath $JsonPath))
-    {
-        # Allows the user the read the error message
-        Start-Sleep -Seconds 50
-        return
-    }
+    $contextMenuItemsJson = GetObjectFromJsonOrXml -Path $Path
 
     foreach ($item in $contextMenuItemsJson)
     {
@@ -305,7 +235,6 @@ function Remove-ContextMenuItem([string] $JsonPath, [switch] $Verbose)
         RemoveContextMenuItem -Item $item -ItemPath $itemPath -Verbose:$Verbose
     }   
 }
-
 
 function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList, [string] $Message)
 {
@@ -341,7 +270,7 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
 
     foreach ($filePath in $filePaths)
     {
-        $functionCalls += "$FunctionName -JsonPath '$filePath' $verboseArg`n"
+        $functionCalls += "$FunctionName -Path '$filePath' $verboseArg`n"
     }
 
     $command = @(
@@ -354,6 +283,128 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
 
     Start-Process -Verb RunAs -Path Powershell -ArgumentList "$noExitArg $ArgumentList -Command $command"
 }
+
+
+#endregion
+
+#region Error functions
+
+function WriteError($Message) 
+{
+    [Console]::ForegroundColor = 'Red'
+    [Console]::Error.WriteLine($Message)
+    [Console]::ResetColor()
+}
+
+function IsRunningAsAdministrator()
+{
+    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+
+    return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+function TestJsonString($JsonString)
+{
+    try
+    {
+        ConvertFrom-Json $JsonString -ErrorAction Stop > $null
+
+        return $true
+    }
+    catch { return $false }
+}
+
+function TestXmlString($XmlString)
+{
+    try
+    {
+        [xml]($XmlString) > $null
+
+        return $true
+    }
+    catch { return $false }
+}
+
+function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
+{
+    $isValid = $true
+
+    $sameLevelItemKeys = new-Object System.Collections.Generic.HashSet[string]
+
+    foreach ($item in $Items)
+    {
+        foreach ($propertyName in $item.PSObject.Properties.Name)
+        {
+            if (-not ($VALID_PROPERTY_SET.Contains($propertyName)))
+            {
+                WriteError "'$propertyName' is not a valid item property name at:`n$Path`n`nThis is the valid set from settings.ini: [$($VALID_PROPERTY_SET -join ', ')] " -Category InvalidData
+                return $false
+            }
+
+            $propertyValue = $item.$propertyName
+
+            switch ($propertyName)
+            {
+                $PROPERTY_KEY
+                {
+                    if ( -not $sameLevelItemKeys.Add($propertyValue))
+                    {
+                        WriteError "'$propertyValue' is a repeated key at:`n$Path`n`nKeys must be unique in the same level of depth."
+                        return $false
+                    }
+                }
+                $PROPERTY_TYPE
+                {
+                    if (-not ($contextMenuTypePaths.Keys -contains $propertyValue))
+                    {
+                        WriteError "'$propertyValue' is not a valid value for the 'Type' property at:`n$Path.`n`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
+                        return $false
+                    }
+                }
+                $PROPERTY_ICON
+                {
+                    if (-not (Test-Path $propertyValue))
+                    {
+                        WriteError "'$propertyValue' is not an existing file at:`n$Path"
+                        return $false
+                    }
+                }
+                $PROPERTY_OPTIONS { $isValid = TestObjectKeyNamesAndValues_WriteError -Items $propertyValue -Path $Path }
+            }
+        }
+    }
+
+    return $isValid
+}
+
+function TestFileContentErrors_WriteError([string] $Path, [string] $Content, [psobject] $Object)
+{
+    $fileExtension = $fileExtension = [System.IO.Path]::GetExtension($Path)
+
+    if (-not (IsRunningAsAdministrator))
+    {
+        WriteError "Script must run as administrator."
+        return $false
+    }
+
+    $isJsonError = ($fileExtension -eq '.json') -and (-not (TestJsonString $Content))
+    $isXmlError  = ($fileExtension -eq '.xml') -and (-not (TestXmlString $Content))
+    $isFileError = $isJsonError -or $isXmlError
+
+    if ($isFileError)
+    {
+        WriteError "Wrong format in file: $Path" -Category InvalidData
+        return $false
+    }
+    if (-not (TestObjectKeyNamesAndValues_WriteError -Items $Object -Path $Path))
+    {
+        return $false
+    }
+
+    return $true
+}
+
+#endregion
 
 
 
