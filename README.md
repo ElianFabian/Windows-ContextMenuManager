@@ -1,26 +1,27 @@
 
 
+
 # Windows-ContextMenuManager
-This is a simple set of powershell scripts to create your own Windows' context menus from json files.
+This is a simple set of powershell scripts to create your own Windows' context menus from json or xml files.
 
 ![context-menu](https://user-images.githubusercontent.com/86477169/189173085-67539358-1f1c-4bba-86d3-eeacd1c5d038.PNG)
 
 # Introduction
 We have 2 main scripts: **Import-ContextMenuItem.ps1** and **Remove-ContextMenuItem.ps1**.
-What they do is to read all the json files listed in **context-menu-list.txt**, 
-they can be single files or folders with json files in it, and it allows both absolute and relative paths.
+What they do is to read all the files listed in **context-menu-list.txt**, 
+they can be single files or folders with files in it, and it allows both absolute and relative paths.
 
-As metion json paths are stored in **context-menu-list.txt**, it's one path per line, and also allows comments that start with "#" and empty lines.
+As metion these file paths are stored in **context-menu-list.txt**, it's one path per line, and also allows comments that start with "#" and empty lines.
 
 In case you wan't you change something you can do it with [**settings.ini**](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/settings.ini), it stores the name of the list of paths to read (by default it context-menu-list.txt),
-and also as we'll see later you can change the names of the properties of the json files as you wish (I don't think you're gonna need to do that but I it's up to you).
+and also as we'll see later you can change the names of the properties in the files as you wish (I don't think you're going to need to do that, but I it's up to you).
 
-Finally the **BasicSetup.ps1** script, it generates the basic needed files needed for the scripts to work and also generates a json template inside the "Source" folder as an example
+Finally the **BasicSetup.ps1** script, it generates the basic needed files needed for the scripts to work and also generates a json and xml template inside the "Source" folder as an example
 (this repository already includes those generated files).
 In case you have setup your directory and executes the script, it won't override any of your existing scripts with the same name as the generated ones.
 
 # How context menus work
-
+As mention you can work with both json and xml files, but to explain it we'll be using the json format.
 ``` js
 [
 	// Group item
@@ -62,15 +63,16 @@ Lastly there 2 left properties that exclusively belong to either commands or to 
 - **Commad**: it's a string of code.
 - **Options**: it's an array of groups and commads
 
-To better undertand the json structure consider checking out this json template [context-menu-items.json](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.json)
+To better undertand the json structure consider checking out this json template: [context-menu-items.json](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.json)
+In here you have the xml template: [context-menu-items..xml](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.xml).
 
 # How to use
 
-Assuming you downloaded the repository and you already have your json file(s) ready you only have to execute **Import-ContextMenuItem.ps1** to import your context menu. It may take a few seconds to import it, you will know it finished when the empty console window closes automatically.
+Assuming you downloaded the repository and you already have your file(s) ready you only have to execute **Import-ContextMenuItem.ps1** to import your context menu. It may take a few seconds to import it, you will know it finished when the empty console window closes automatically.
 When you want to remove the context menu just execute **Remove-ContextMenuItem.ps1**.
 Removing it's faster than importing.
 
-In case your json file has a wrong format or even inappropriate keys or values it will stop executing and shows you what's the error and the specific json file (remember you can work with more than one json files).
+In case your file has a wrong format or even inappropriate keys or values it will stop executing and shows you what's the error and the specific file (remember you can work with more than one file).
 
 # Extra
 In case you want to know what is the manual way of creating context menus check this [medium article](https://medium.com/analytics-vidhya/creating-cascading-context-menus-with-the-windows-10-registry-f1cf3cd8398f).
