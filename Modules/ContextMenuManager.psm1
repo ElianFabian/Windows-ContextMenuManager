@@ -21,7 +21,7 @@ if (-not (Test-Path $PSScriptRoot\..\$settingsFile))
     exit
 }
 
-$settings = (Get-Content -Path "$PSScriptRoot\..\$settingsFile" -Encoding utf8) | ConvertFrom-StringData
+$settings = Get-Content -Path "$PSScriptRoot\..\$settingsFile" -Encoding utf8 | ConvertFrom-StringData
 
 
 
@@ -35,9 +35,9 @@ $PROPERTY_OPTIONS  = $settings.PROPERTY_OPTIONS
 $PROPERTY_EXTENDED = $settings.PROPERTY_EXTENDED
 $PROPERTY_ICON     = $settings.PROPERTY_ICON
 
-$VALID_PROPERTY_SET = @()
+$VALID_PROPERTY_SET = New-Object System.Collections.Generic.HashSet[string]
 
-foreach ($propertyName in $settings.PSObject.Properties.Name)
+foreach ($propertyName in $settings.Keys)
 {
     if ($propertyName.StartsWith("PROPERTY_"))
     {
@@ -45,10 +45,9 @@ foreach ($propertyName in $settings.PSObject.Properties.Name)
     }
 }
 
-$VALID_PROPERTY_SET = @("Key", "Name", "Type", "Command", "Options", "Extended", "Icon")
-
 $CONSOLE_VERBOSE = [System.Convert]::ToBoolean($settings.CONSOLE_VERBOSE)
 $CONSOLE_NO_EXIT = [System.Convert]::ToBoolean($settings.CONSOLE_NO_EXIT)
+
 
 #endregion
 
