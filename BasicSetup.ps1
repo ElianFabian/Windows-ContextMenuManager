@@ -28,6 +28,7 @@ $defaultContextMenuJson  = "context-menu-items.json"
 
 # Create settings.ini ------------------------------------------------------------------------------
 $settingsDefaultContent = @"
+# Names of the json properties
 PROPERTY_KEY     =Key
 PROPERTY_NAME    =Name
 PROPERTY_TYPE    =Type
@@ -36,10 +37,11 @@ PROPERTY_OPTIONS =Options
 PROPERTY_EXTENDED=Extended
 PROPERTY_ICON    =Icon
 
+# File with the list of json paths (or folders with json files) to import
 CONTEXT_MENU_LIST_PATH=./context-menu-list.txt
 
 # If true shows information about what is happening when importing or removing
-VERBOSE=false
+CONSOLE_VERBOSE=false
 
 # If true when you execute the import ot remove script it will not close automatically
 CONSOLE_NO_EXIT=false
