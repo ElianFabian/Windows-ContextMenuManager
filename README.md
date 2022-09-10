@@ -59,7 +59,7 @@ We have to different first-level items, which are the ones who aren't inside ano
 - **Extended**: when present and set to true you have to hold *Shift* to make the item visible.
 It can be omitted in case it's false.
 
-Lastly there 2 left properties that exclusively belong to either commands or to groups:
+Lastly there 2 left properties that exclusively belong to either commands or groups:
 - **Commad**: it's a string of code.
 - **Options**: it's an array of groups and commads
 
