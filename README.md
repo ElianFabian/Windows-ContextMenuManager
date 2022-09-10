@@ -67,6 +67,8 @@ To better undertand the json structure consider checking out this json template:
 
 In here you have the xml template: [context-menu-items.xml](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.xml).
 
+Keep in mind that in xml the tag names are actually arbitrary, if you change the <Root> tag name or the <Item> tag name it will have no effect.
+
 # How to use
 
 Assuming you downloaded the repository and you already have your file(s) ready you only have to execute **Import-ContextMenuItem.ps1** to import your context menu. It may take a few seconds to import it, you will know it finished when the empty console window closes automatically.
