@@ -71,7 +71,7 @@ Keep in mind that in xml the tag names are actually arbitrary, if you change the
 
 # How to use
 
-Assuming you downloaded the repository and you already have your file(s) ready you only have to execute **Import-ContextMenuItem.ps1** to import your context menu. It may take a few seconds to import it, you will know it finished when the empty console window closes automatically.
+Assuming you downloaded the repository and you already have your file(s) ready you only have to execute **Import-ContextMenuItem.ps1** to import your context menu items. It may take a few seconds to import it, you will know it finished when the empty console window closes automatically.
 When you want to remove the context menu just execute **Remove-ContextMenuItem.ps1**.
 Removing it's faster than importing.
 
