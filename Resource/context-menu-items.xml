@@ -42,5 +42,6 @@
         Name="Get number of characters"
         Icon="C:/Program Files/internet explorer/images/bing.ico"
         Type="File"
-        Command="powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length" />
+        Command="powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length"
+    />
 </Root>
