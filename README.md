@@ -67,7 +67,7 @@ To better undertand the json structure consider checking out this json template:
 
 In here you have the xml template: [context-menu-items.xml](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.xml).
 
-Keep in mind that in xml the tag names are actually arbitrary, if you change the <Root> tag name or the <Item> tag name it will have no effect.
+Keep in mind that in xml the tag names are actually arbitrary, if you change the names of **Root** tag or the **Item** tag it will have no effect.
 
 # How to use
 
