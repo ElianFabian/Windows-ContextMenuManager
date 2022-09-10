@@ -63,7 +63,7 @@ Lastly there 2 left properties that exclusively belong to either commands or to 
 - **Commad**: it's a string of code.
 - **Options**: it's an array of groups and commads
 
-To better undertand the json structure consider checking out this json template: [context-menu-items.json](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.json)
+To better undertand the json structure consider checking out this json template: [context-menu-items.json](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.json).
 In here you have the xml template: [context-menu-items..xml](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.xml).
 
 # How to use
