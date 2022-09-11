@@ -56,8 +56,7 @@ Avoid changing the key because if you import the context menu, then change one k
 We have to different first-level items, which are the ones who aren't inside another group, these are kind of special because they have 2 properties subitems can't have:
 - **Type**: indicates where the context menu items must appear. There are 4 types:
 > [File, Directory, Desktop, Drive]
-- **Extended**: when present you have to hold *Shift* to make the item visible, remove the property in case you don't want it.
-Actually you could insert any value and it would work, except 0, an empty string or null.
+- **Extended**: when present you have to hold *Shift* to make the item visible. Setting the value to false has the same effect as removing the property.
 
 Lastly there 2 left properties that exclusively belong to either commands or groups:
 - **Commad**: it's a string of code.
