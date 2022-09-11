@@ -20,6 +20,8 @@ Finally the **BasicSetup.ps1** script, it generates the basic needed files neede
 (this repository already includes those generated files).
 In case you have setup your directory and executes the script, it won't override any of your existing scripts with the same name as the generated ones.
 
+There's also the **Update-ContextMenuItem.ps1** that executes first remove and then import.
+
 # How context menus work
 As mention you can work with both json and xml files, but to explain it we'll be using the json format.
 ``` js
