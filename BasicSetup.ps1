@@ -142,12 +142,14 @@ $contextMenuTemplateXmlContent = @"
             Icon="C:/Program Files/internet explorer/images/bing.ico"
             Command="powershell.exe -NoExit -Command Get-Content '%1'"
         />
+
         <Item
             Key="remove_content"
             Name="Remove content"
             Icon="C:/Program Files/internet explorer/images/bing.ico"
             Command="powershell.exe -Command Set-Content %1 -Value ''"
         />
+
         <Item
             Key="subutils"
             Name="Get size of folder"
@@ -167,6 +169,7 @@ $contextMenuTemplateXmlContent = @"
         Type="Directory"
         Command="powershell.exe -NoExit -Command (Get-ChildItem -File) | ForEach-Object { `$total = 0 } { `$total += `$_.Length } { `$total }"
     />
+
     <Item
         Key="get_number_of_characters"
         Name="Get number of characters"
