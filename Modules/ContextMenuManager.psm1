@@ -92,7 +92,11 @@ function GetObjectFromJsonOrXml($Path)
     {
         .json { $fileContent | ConvertFrom-Json }
         .xml { ConvertXmlObjectToJsonObject -XmlRoot ([xml]($fileContent)).DocumentElement }
-        default { Write-Error "$Path file type not supported." }
+        default
+        {
+            Write-Error "$Path file type not supported."
+            return $null
+        }
     }
 
     if (-not (TestFileContentErrors_WriteError -Path $Path -Content $fileContent -Object $object))
@@ -174,7 +178,9 @@ function Import-ContextMenuItem([string] $Path, [switch] $Verbose)
 
         Write-Verbose "New item: '$contextMenuTypePath\$($item.$PROPERTY_KEY)'" -Verbose:$Verbose
 
-        if ($item.$PROPERTY_EXTENDED)
+        $extendedValue = $item.$PROPERTY_EXTENDED
+
+        if ($null -ne $extendedValue -and $extendedValue -like $true)
         {
             # Set as extended (must hold Shift to make the option visble)
             New-ItemProperty -Path $itemPath -Name Extended > $null
@@ -350,6 +356,14 @@ function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
                     if ( -not $sameLevelItemKeys.Add($propertyValue))
                     {
                         WriteError "'$propertyValue' is a repeated key at:`n$Path`n`nKeys must be unique in the same level of depth."
+                        return $false
+                    }
+                }
+                $PROPERTY_EXTENDED
+                {
+                    if (-not ($propertyValue -like $true -or $propertyValue -like $false))
+                    {
+                        WriteError "'$propertyValue' is not a valid value for the 'Extended' property at:`n$Path.`n`nThis is the valid set: [true, false]"
                         return $false
                     }
                 }
