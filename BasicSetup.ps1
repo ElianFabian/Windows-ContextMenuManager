@@ -62,6 +62,7 @@ $contextMenuListFileContent = @"
 
 # This is the deafault json with a context menu
 $sourceFileName/$defaultContextMenuJson
+
 "@
 
 New-Item -Path $contextMenuListFilename -Value $contextMenuListFileContent -ErrorAction Ignore
