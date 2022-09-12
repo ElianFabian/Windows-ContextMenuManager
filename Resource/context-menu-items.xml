@@ -1,5 +1,5 @@
 <Root>
-    <Item
+    <ItemGroup
         Key="file_utils"
         Name="File Utils"
         Icon="C:/Program Files/internet explorer/images/bing.ico"
@@ -28,7 +28,7 @@
                 Name="Press me! Nothing will happen."
                 Icon="C:/Program Files/internet explorer/images/bing.ico" />
         </Item>
-    </Item>
+    </ItemGroup>
 
     <Item
         Key="get_size_of_all_files"
