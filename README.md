@@ -25,46 +25,46 @@ This is an example of how to create items and groups with json or xml:
 **JSON**
 ``` js
 [
-	// Group item
+    // Group item
+    {
+        "Key" : "utils",
+        "Name" : "Utils"
+        "Type" : "File",
+        "Extended" : true,
+        "Icon" : "an/Arbitrary/Path.ico"
+        "Options" : [...]
+    },
+    // Command item
 	{
-	    "Key" : "utils",
-	    "Name" : "Utils"
-	    "Type" : "File",
-	    "Extended" : true,
-	    "Icon" : "an/Arbitrary/Path.ico"
-	    "Options" : [...]
-	},
-	// Command item
-	{
-	    "Key" : "command_util",
-	    "Name" : "Command Util"
-	    "Type" : "File",
-	    "Icon" : "an/Arbitrary/Path.ico"
-	    "Command" : "powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length"
-	}
+        "Key" : "command_util",
+        "Name" : "Command Util"
+        "Type" : "File",
+        "Icon" : "an/Arbitrary/Path.ico"
+        "Command" : "powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length"
+    }
 ]
 ```
 **XML**
 ```xml
 <Root>
-	<ItemGroup
-		Key="utils"
-		Name="Utils"
-		Type="File"
-		Icon="an/Arbitrary/Path.ico"
-		Extended="true">
+    <ItemGroup
+        Key="utils"
+        Name="Utils"
+        Type="File"
+        Icon="an/Arbitrary/Path.ico"
+        Extended="true">
 
-		<Item ... />
-		<Item ... />
-		...
-	</ItemGroup>
+        <Item ... />
+        <Item ... />
+        ...
+    </ItemGroup>
 
-	<Item
-		Key="command_util"
-		Name="Command Util"
-		Type="File"
-		Icon="an/Arbitrary/Path.ico"
-		Command="powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length" />
+    <Item
+        Key="command_util"
+        Name="Command Util"
+        Type="File"
+        Icon="an/Arbitrary/Path.ico"
+        Command="powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length" />
 </Root>
 ```
 
