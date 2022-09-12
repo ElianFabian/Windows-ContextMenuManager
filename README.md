@@ -1,6 +1,3 @@
-
-
-
 # Windows-ContextMenuManager
 This is a simple set of powershell scripts to create your own Windows' context menus from json or xml files.
 
@@ -23,7 +20,9 @@ In case you have setup your directory and executes the script, it won't override
 There's also the **Update-ContextMenuItem.ps1** that executes first remove and then import.
 
 # How context menus work
-As mention you can work with both json and xml files, but to explain it we'll be using the json format.
+This is an example of how to create items and groups with json or xml:
+
+**JSON**
 ``` js
 [
 	// Group item
@@ -37,13 +36,36 @@ As mention you can work with both json and xml files, but to explain it we'll be
 	},
 	// Command item
 	{
-	    "Key" : "command_utils",
-	    "Name" : "Command Utils"
+	    "Key" : "command_util",
+	    "Name" : "Command Util"
 	    "Type" : "File",
 	    "Icon" : "an/Arbitrary/Path.ico"
 	    "Command" : "powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length"
 	}
 ]
+```
+**XML**
+```xml
+<Root>
+	<ItemGroup
+		Key="utils"
+		Name="Utils"
+		Type="File"
+		Icon="an/Arbitrary/Path.ico"
+		Extended="true">
+
+		<Item ... />
+		<Item ... />
+		...
+	</ItemGroup>
+
+	<Item
+		Key="command_util"
+		Name="Command Util"
+		Type="File"
+		Icon="an/Arbitrary/Path.ico"
+		Command="powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length" />
+</Root>
 ```
 
 We have 2 kind of items in context menus, **commands** and **groups** of commands (or also groups).
