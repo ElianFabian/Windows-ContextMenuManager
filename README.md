@@ -20,7 +20,7 @@ In case you have setup your directory and executes the script, it won't override
 There's also the **Update-ContextMenuItem.ps1** that executes first remove and then import.
 
 # How context menus work
-This is an example of how to create items and groups with json or xml:
+This is an example of how to create items and groups with json and xml:
 
 **JSON**
 ``` js
