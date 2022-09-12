@@ -18,7 +18,7 @@
             Icon="C:/Program Files/internet explorer/images/bing.ico"
             Command="powershell.exe -Command Set-Content %1 -Value ''" />
 
-        <Item
+        <ItemGroup
             Key="subutils"
             Name="Get size of folder"
             Icon="C:/Program Files/internet explorer/images/bing.ico">
@@ -27,7 +27,7 @@
                 Key="nothing"
                 Name="Press me! Nothing will happen."
                 Icon="C:/Program Files/internet explorer/images/bing.ico" />
-        </Item>
+        </ItemGroup>
     </ItemGroup>
 
     <Item
