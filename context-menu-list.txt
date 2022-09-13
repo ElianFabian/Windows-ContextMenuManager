@@ -1,4 +1,4 @@
-# You can add all the files you want, with relative or absolute path, also folders with a list of json files
+# You can add all the files you want, with relative or absolute path, also folders with a list of json or xml files
 # As you see commets starts with a hash (#)
 
 # This is the deafault json with a context menu
