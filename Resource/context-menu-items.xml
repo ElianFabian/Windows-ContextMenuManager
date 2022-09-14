@@ -4,7 +4,7 @@
         Name="File Utils"
         Icon="C:/Program Files/internet explorer/images/bing.ico"
         Extended="true"
-        Type="File" >
+        Type="File">
 
         <Item
             Key="read_content"
