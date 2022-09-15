@@ -101,4 +101,4 @@ Removing it's faster than importing.
 In case your file has a wrong format or even inappropriate keys or values it will stop executing and shows you what's the error and the specific file (remember you can work with more than one file).
 
 # Extra
-In case you want to know what is the manual way of creating context menus check this [medium article](https://medium.com/analytics-vidhya/creating-cascading-context-menus-with-the-windows-10-registry-f1cf3cd8398f).
+In case you want to know what is the manual way of adding context menus items check this [medium article](https://medium.com/analytics-vidhya/creating-cascading-context-menus-with-the-windows-10-registry-f1cf3cd8398f).
