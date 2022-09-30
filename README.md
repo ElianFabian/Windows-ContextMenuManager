@@ -68,7 +68,7 @@ This is an example of how to create items and groups with json and xml:
 </Root>
 ```
 
-We have 2 kind of items in context menus, **commands** and **groups** of commands (or also groups).
+We have 2 kind of items in context menus, **commands** and **groups** of commands.
 The first type executes code and the other it's just a container.
 
 All the items in context menus have 3 common properties:
