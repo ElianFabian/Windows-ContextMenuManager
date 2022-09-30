@@ -31,7 +31,7 @@ This is an example of how to create items and groups with json and xml:
         "Name" : "Utils",
         "Type" : "File",
         "Extended" : true,
-        "Icon" : "an/Arbitrary/Path.ico",
+        "Icon" : "an/Arbitrary/Path/image.ico",
         "Options" : [...]
     },
     // Command item
@@ -39,7 +39,7 @@ This is an example of how to create items and groups with json and xml:
         "Key" : "command_util",
         "Name" : "Command Util",
         "Type" : "File",
-        "Icon" : "an/Arbitrary/Path.ico",
+        "Icon" : "an/Arbitrary/Path/image.ico",
         "Command" : "powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length"
     }
 ]
@@ -51,7 +51,7 @@ This is an example of how to create items and groups with json and xml:
         Key="utils"
         Name="Utils"
         Type="File"
-        Icon="an/Arbitrary/Path.ico"
+        Icon="an/Arbitrary/Path/image.ico"
         Extended="true">
 
         <Item ... />
@@ -63,7 +63,7 @@ This is an example of how to create items and groups with json and xml:
         Key="command_util"
         Name="Command Util"
         Type="File"
-        Icon="an/Arbitrary/Path.ico"
+        Icon="an/Arbitrary/Path/image.ico"
         Command="powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length" />
 </Root>
 ```
