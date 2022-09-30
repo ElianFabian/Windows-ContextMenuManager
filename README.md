@@ -10,7 +10,7 @@ they can be single files or folders with files in it, and it allows both absolut
 
 As metion these file paths are stored in **context-menu-list.txt**, it's one path per line, and also allows comments that start with "#" and empty lines.
 
-In case you wan't you change something you can do it with [**settings.ini**](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/settings.ini), it stores the name of the list of paths to read (by default it context-menu-list.txt),
+In case you want to change the configuration you can do it with [**settings.ini**](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/settings.ini), it stores the name of the list of paths to read (by default it's context-menu-list.txt),
 and also as we'll see later you can change the names of the properties in the files as you wish (I don't think you're going to need to do that, but I it's up to you).
 
 Finally the **BasicSetup.ps1** script, it generates the basic needed files needed for the scripts to work and also generates a json and xml template inside the "Source" folder as an example
@@ -35,7 +35,7 @@ This is an example of how to create items and groups with json and xml:
         "Options" : [...]
     },
     // Command item
-	{
+    {
         "Key" : "command_util",
         "Name" : "Command Util",
         "Type" : "File",
