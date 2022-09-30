@@ -28,18 +28,18 @@ This is an example of how to create items and groups with json and xml:
     // Group item
     {
         "Key" : "utils",
-        "Name" : "Utils"
+        "Name" : "Utils",
         "Type" : "File",
         "Extended" : true,
-        "Icon" : "an/Arbitrary/Path.ico"
+        "Icon" : "an/Arbitrary/Path.ico",
         "Options" : [...]
     },
     // Command item
 	{
         "Key" : "command_util",
-        "Name" : "Command Util"
+        "Name" : "Command Util",
         "Type" : "File",
-        "Icon" : "an/Arbitrary/Path.ico"
+        "Icon" : "an/Arbitrary/Path.ico",
         "Command" : "powershell.exe -NoExit -Command (Get-Content '%1' -Raw).Length"
     }
 ]
