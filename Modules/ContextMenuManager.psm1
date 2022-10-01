@@ -54,6 +54,8 @@ $CONSOLE_NO_EXIT = [System.Convert]::ToBoolean($settings.CONSOLE_NO_EXIT)
 # So we just ignore the error
 $CONTEXT_MENU_LIST_PATH = Resolve-Path $settings.CONTEXT_MENU_LIST_PATH -ErrorAction Ignore
 
+$POWERSHELL_EXE = $settings.POWERSHELL_EXE
+
 #endregion
 
 #region Object manipulation
@@ -287,7 +289,7 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
 
     $noExitArg = if ($CONSOLE_NO_EXIT) { "-NoExit" } else { "" }
 
-    Start-Process -Verb RunAs -Path Powershell -ArgumentList "$noExitArg $ArgumentList -Command $command"
+    Start-Process -Verb RunAs -Path $POWERSHELL_EXE -ArgumentList "$noExitArg $ArgumentList -Command $command"
 }
 
 
