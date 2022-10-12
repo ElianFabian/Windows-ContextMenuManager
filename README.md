@@ -1,5 +1,5 @@
 # Windows-ContextMenuManager
-This is a simple set of powershell scripts to create your own Windows' context menus from json or xml files.
+A simple set of PowerShell scripts to add options to the Windows' context menu from json or xml files.
 
 ![context-menu](https://user-images.githubusercontent.com/86477169/189173085-67539358-1f1c-4bba-86d3-eeacd1c5d038.PNG)
 
