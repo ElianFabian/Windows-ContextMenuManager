@@ -27,7 +27,9 @@
                 Key="nothing"
                 Name="Press me! Nothing will happen."
                 Icon="C:/Program Files/internet explorer/images/bing.ico" />
+
         </ItemGroup>
+
     </ItemGroup>
 
     <Item
