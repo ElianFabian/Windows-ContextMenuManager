@@ -99,7 +99,7 @@ When you want to remove the context menu just execute **Remove-ContextMenuItem.p
 Removing it's faster than importing.
 
 In case your file has a wrong format or even inappropriate keys or values it will stop executing and shows you what's the error and the specific file (remember you can work with more than one file).
-In order to see the error you should set CONSOLE_NO_EXIT to true in [**settings.ini**](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/settings.ini) to avoid autoclosing the console.
+In order to see the error you should set <b>CONSOLE_NO_EXIT</b> to <b>true</b> in [**settings.ini**](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/settings.ini) to avoid autoclosing the console.
 
 # Extra
 In case you want to know what is the manual way of adding context menus items check this [medium article](https://medium.com/analytics-vidhya/creating-cascading-context-menus-with-the-windows-10-registry-f1cf3cd8398f).
