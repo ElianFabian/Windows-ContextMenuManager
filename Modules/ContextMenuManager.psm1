@@ -170,17 +170,15 @@ function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList
     $verboseArg = if ($CONSOLE_VERBOSE) { "-Verbose" } else { "" }
 
     # Create one function call per json file
-    $functionCalls = ""
-
-    foreach ($filePath in $filePaths)
+    $functionCalls = foreach ($filePath in $filePaths)
     {
-        $functionCalls += "$FunctionName -Path '$filePath' $verboseArg`n"
+        "$FunctionName -Path '$filePath' $verboseArg`n"
     }
 
     $command = @(
         "Import-Module -Name '$PSCommandPath'",
         "Write-Host '$Message' -ForegroundColor Green",
-        $functionCalls
+        $functionCalls -join "`n"
     ) -join "`n"
 
     $noExitArg = if ($CONSOLE_NO_EXIT) { "-NoExit" } else { "" }
