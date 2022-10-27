@@ -101,6 +101,24 @@ function Import-ContextMenuItem([string] $Path, [switch] $Verbose)
     }
 }
 
+function RemoveCommandItem([string] $ItemPath, [switch] $Verbose)
+{
+    Remove-Item -Path $ItemPath\command
+    Remove-Item -Path $ItemPath
+
+    Write-Verbose "Remove item: '$ItemPath\command'" -Verbose:$Verbose
+    Write-Verbose "Remove item: '$ItemPath'" -Verbose:$Verbose
+}
+
+function RemoveGroupItem([string] $ItemPath, [switch] $Verbose)
+{
+    Remove-Item -Path $ItemPath\Shell
+    Remove-Item -Path $ItemPath
+
+    Write-Verbose "Remove item: '$ItemPath\Shell'" -Verbose:$Verbose
+    Write-Verbose "Remove item: '$ItemPath'" -Verbose:$Verbose
+}
+
 function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
     $itemNotExists = -not (Get-Item -Path $ItemPath -ErrorAction Ignore)
@@ -113,28 +131,19 @@ function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $V
 
     if ($item.$PROPERTY_OPTIONS)
     {
-        $itemShellPath = "$ItemPath\Shell"
-
+        # Remove subitems
         foreach ($item in $item.$PROPERTY_OPTIONS)
         {
-            $subitemPath = "$itemShellPath\$($item.$PROPERTY_KEY)"
+            $subitemPath = "$ItemPath\Shell\$($item.$PROPERTY_KEY)"
 
             RemoveContextMenuItem -Item $item -ItemPath $subitemPath -Verbose:$Verbose
         }
 
-        Remove-Item -Path $itemShellPath
-        Remove-Item -Path $ItemPath
-
-        Write-Verbose "Remove item: '$itemShellPath'" -Verbose:$Verbose
-        Write-Verbose "Remove item: '$ItemPath'" -Verbose:$Verbose
+        RemoveGroupItem -ItemPath $ItemPath -Verbose:$Verbose
     }
     else
     {
-        Remove-Item -Path $ItemPath\command
-        Remove-Item -Path $ItemPath
-
-        Write-Verbose "Remove item: '$ItemPath\command'" -Verbose:$Verbose
-        Write-Verbose "Remove item: '$ItemPath'" -Verbose:$Verbose
+        RemoveCommandItem -ItemPath $ItemPath -Verbose:$Verbose
     }
 }
 
