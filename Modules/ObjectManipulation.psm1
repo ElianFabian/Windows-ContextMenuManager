@@ -38,7 +38,7 @@ function GetObjectFromJsonOrXml($Path)
         .xml { ConvertXmlObjectToJsonObject -XmlRoot ([xml]($fileContent)).DocumentElement }
         default
         {
-            Write-Error "$Path file type not supported."
+            Write-Error "$Path file type '$fileExtension' not supported."
             return $null
         }
     }
