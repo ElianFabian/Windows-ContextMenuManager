@@ -15,6 +15,7 @@ $RP_SHELL       = 'Shell'
 $RP_MUI_VERB    = 'MUIVerb'
 $RP_SUBCOMMANDS = 'Subcommands'
 $RP_EXTENDED    = 'Extended'
+$RP_ICON        = 'Icon'
 
 
 
@@ -59,7 +60,7 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verb
         $iconPath = Resolve-Path $Item.$P_ICON
 
         # Set item image
-        New-ItemProperty -Path $ItemPath -Name Icon -Value $iconPath > $null
+        New-ItemProperty -Path $ItemPath -Name $RP_ICON -Value $iconPath > $null
 
         Write-Verbose "New item property: '$ItemPath' = '$iconPath'" -Verbose:$Verbose
     }
