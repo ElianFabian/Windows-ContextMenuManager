@@ -1,6 +1,7 @@
 $basePath = "Registry::HKEY_CLASSES_ROOT"
 
-$contextMenuTypePaths = @{
+$contextMenuTypePaths =
+@{
     File      = "$basePath\``*\shell"
     Directory = "$basePath\Directory\shell"
     Desktop   = "$basePath\Directory\background\shell"
