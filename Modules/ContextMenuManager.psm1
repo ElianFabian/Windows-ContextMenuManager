@@ -98,9 +98,7 @@ function Import-ContextMenuItem([string] $Path, [switch] $Verbose)
 
         Write-Verbose "New item: '$contextMenuTypePath\$($item.$P_KEY)'" -Verbose:$Verbose
 
-        $extendedValue = $item.$P_EXTENDED
-
-        if ($null -ne $extendedValue -and $extendedValue -like $true)
+        if ($null -ne $item.$P_EXTENDED -and $item.$P_EXTENDED -like $true)
         {
             # Mark as extended (must hold Shift to make the option visible)
             New-ItemProperty -Path $itemPath -Name $RP_EXTENDED > $null
