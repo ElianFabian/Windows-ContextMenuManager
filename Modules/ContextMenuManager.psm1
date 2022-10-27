@@ -8,35 +8,45 @@ Import-Module -Name "$PSScriptRoot\ObjectManipulation.psm1"
 
 
 
+# Registry properties
+$RP_DEFAULT     = '(default)'
+$RP_COMMAND     = 'Command'
+$RP_SHELL       = 'Shell'
+$RP_MUI_VERB    = 'MUIVerb'
+$RP_SUBCOMMANDS = 'Subcommands'
+$RP_EXTENDED    = 'Extended'
+
+
+
 function NewCommandItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
     # Create command item
-    $commandPath = (New-Item -Path $ItemPath -Name Command).PSPath
+    $commandPath = (New-Item -Path $ItemPath -Name $RP_COMMAND).PSPath
 
     # Set command name
-    New-ItemProperty -Path $ItemPath -Name '(default)' -Value $Item.$PROPERTY_NAME > $null
+    New-ItemProperty -Path $ItemPath -Name $RP_DEFAULT -Value $Item.$PROPERTY_NAME > $null
 
     # Set command value
-    New-ItemProperty -LiteralPath $commandPath -Name '(default)' -Value $Item.$PROPERTY_COMMAND > $null
+    New-ItemProperty -LiteralPath $commandPath -Name $RP_DEFAULT -Value $Item.$PROPERTY_COMMAND > $null
 
     Write-Verbose "New item: '$commandPath'" -Verbose:$Verbose
-    Write-Verbose "New item property: '$ItemPath\(default)' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
-    Write-Verbose "New item property: '$commandPath\(default)' = '$($Item.$PROPERTY_COMMAND)'" -Verbose:$Verbose
+    Write-Verbose "New item property: '$ItemPath\$RP_DEFAULT' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
+    Write-Verbose "New item property: '$commandPath\$RP_DEFAULT' = '$($Item.$PROPERTY_COMMAND)'" -Verbose:$Verbose
 }
 
 function NewGroupItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
     # Set group name (MUIVerb)
-    New-ItemProperty -Path $ItemPath -Name MUIVerb -Value $Item.$PROPERTY_NAME > $null
+    New-ItemProperty -Path $ItemPath -Name $RP_MUI_VERB -Value $Item.$PROPERTY_NAME > $null
 
     # Allow subitems
-    New-ItemProperty -Path $ItemPath -Name subcommands > $null
+    New-ItemProperty -Path $ItemPath -Name $RP_SUBCOMMANDS > $null
 
     # Create shell (container of subitems)
-    $itemShellPath = (New-Item -Path $ItemPath -Name Shell).PSPath.Replace("*", "``*")
+    $itemShellPath = (New-Item -Path $ItemPath -Name $RP_SHELL).PSPath.Replace("*", "``*")
 
-    Write-Verbose "New item property: '$ItemPath\MUIVerb' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
-    Write-Verbose "New item property: '$ItemPath\subcommands'" -Verbose:$Verbose
+    Write-Verbose "New item property: '$ItemPath\$RP_MUI_VERB' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
+    Write-Verbose "New item property: '$ItemPath\$RP_SUBCOMMANDS'" -Verbose:$Verbose
     Write-Verbose "New item: '$itemShellPath'" -Verbose:$Verbose
 
     return $itemShellPath
@@ -92,9 +102,9 @@ function Import-ContextMenuItem([string] $Path, [switch] $Verbose)
         if ($null -ne $extendedValue -and $extendedValue -like $true)
         {
             # Mark as extended (must hold Shift to make the option visible)
-            New-ItemProperty -Path $itemPath -Name Extended > $null
+            New-ItemProperty -Path $itemPath -Name $RP_EXTENDED > $null
 
-            Write-Verbose "New item property: '$itemPath\Extended'" -Verbose:$Verbose
+            Write-Verbose "New item property: '$itemPath\$RP_EXTENDED'" -Verbose:$Verbose
         }
 
         NewContextMenuItem -Item $item -ItemPath $itemPath -Verbose:$Verbose
@@ -104,19 +114,19 @@ function Import-ContextMenuItem([string] $Path, [switch] $Verbose)
 
 function RemoveCommandItem([string] $ItemPath, [switch] $Verbose)
 {
-    Remove-Item -Path $ItemPath\Command
+    Remove-Item -Path $ItemPath\$RP_COMMAND
     Remove-Item -Path $ItemPath
 
-    Write-Verbose "Remove item: '$ItemPath\Command'" -Verbose:$Verbose
+    Write-Verbose "Remove item: '$ItemPath\$RP_COMMAND'" -Verbose:$Verbose
     Write-Verbose "Remove item: '$ItemPath'" -Verbose:$Verbose
 }
 
 function RemoveGroupItem([string] $ItemPath, [switch] $Verbose)
 {
-    Remove-Item -Path $ItemPath\Shell
+    Remove-Item -Path $ItemPath\$RP_SHELL
     Remove-Item -Path $ItemPath
 
-    Write-Verbose "Remove item: '$ItemPath\Shell'" -Verbose:$Verbose
+    Write-Verbose "Remove item: '$ItemPath\$RP_SHELL'" -Verbose:$Verbose
     Write-Verbose "Remove item: '$ItemPath'" -Verbose:$Verbose
 }
 
@@ -135,7 +145,7 @@ function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $V
         # Remove subitems
         foreach ($item in $item.$PROPERTY_OPTIONS)
         {
-            $subitemPath = "$ItemPath\Shell\$($item.$PROPERTY_KEY)"
+            $subitemPath = "$ItemPath\$RP_SHELL\$($item.$PROPERTY_KEY)"
 
             RemoveContextMenuItem -Item $item -ItemPath $subitemPath -Verbose:$Verbose
         }
