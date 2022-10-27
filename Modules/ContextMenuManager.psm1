@@ -8,6 +8,40 @@ Import-Module -Name "$PSScriptRoot\ObjectManipulation.psm1"
 
 
 
+function NewCommandItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
+{
+    # Create command item
+    $commandPath = (New-Item -Path $ItemPath -Name command).PSPath
+
+    # Set command name
+    New-ItemProperty -Path $ItemPath -Name '(default)' -Value $Item.$PROPERTY_NAME > $null
+
+    # Set command value
+    New-ItemProperty -LiteralPath $commandPath -Name '(default)' -Value $Item.$PROPERTY_COMMAND > $null
+
+    Write-Verbose "New item: '$commandPath'" -Verbose:$Verbose
+    Write-Verbose "New item property: '$ItemPath\(default)' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
+    Write-Verbose "New item property: '$commandPath\(default)' = '$($Item.$PROPERTY_COMMAND)'" -Verbose:$Verbose
+}
+
+function NewGroupItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
+{
+    # Set group name (MUIVerb)
+    New-ItemProperty -Path $ItemPath -Name MUIVerb -Value $Item.$PROPERTY_NAME > $null
+
+    # Allow subitems
+    New-ItemProperty -Path $ItemPath -Name subcommands > $null
+
+    # Create shell (container of subitems)
+    $itemShellPath = (New-Item -Path $ItemPath -Name Shell).PSPath.Replace("*", "``*")
+
+    Write-Verbose "New item property: '$ItemPath\MUIVerb' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
+    Write-Verbose "New item property: '$ItemPath\subcommands'" -Verbose:$Verbose
+    Write-Verbose "New item: '$itemShellPath'" -Verbose:$Verbose
+
+    return $itemShellPath
+}
+
 function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
     if ($Item.$PROPERTY_ICON)
@@ -22,18 +56,7 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verb
 
     if ($item.$PROPERTY_OPTIONS)
     {
-        # Set group name (MUIVerb)
-        New-ItemProperty -Path $ItemPath -Name MUIVerb -Value $Item.$PROPERTY_NAME > $null
-
-        # Allow subitems
-        New-ItemProperty -Path $ItemPath -Name subcommands > $null
-
-        # Create shell (container of subitems)
-        $itemShellPath = (New-Item -Path $ItemPath -Name Shell).PSPath.Replace("*", "``*")
-
-        Write-Verbose "New item property: '$ItemPath\MUIVerb' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
-        Write-Verbose "New item property: '$ItemPath\subcommands'" -Verbose:$Verbose
-        Write-Verbose "New item: '$itemShellPath'" -Verbose:$Verbose
+        $itemShellPath = NewGroupItem -Item $Item -ItemPath $ItemPath -Verbose:$Verbose
 
         # Create subitems
         foreach ($subitem in $Item.$PROPERTY_OPTIONS)
@@ -47,18 +70,7 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verb
     }
     else
     {
-        # Create command item
-        $commandPath = (New-Item -Path $ItemPath -Name command).PSPath
-
-        # Set command name
-        New-ItemProperty -Path $ItemPath -Name '(default)' -Value $Item.$PROPERTY_NAME > $null
-
-        # Set command value
-        New-ItemProperty -LiteralPath $commandPath -Name '(default)' -Value $Item.$PROPERTY_COMMAND > $null
-
-        Write-Verbose "New item: '$commandPath'" -Verbose:$Verbose
-        Write-Verbose "New item property: '$ItemPath\(default)' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
-        Write-Verbose "New item property: '$commandPath\(default)' = '$($Item.$PROPERTY_COMMAND)'" -Verbose:$Verbose
+        NewCommandItem -Item $Item -ItemPath $ItemPath -Verbose:$Verbose
     }
 }
 
@@ -140,8 +152,13 @@ function Remove-ContextMenuItem([string] $Path, [switch] $Verbose)
     }   
 }
 
-function Start-ContextMenuProcess([string] $FunctionName, [string] $ArgumentList, [string] $Message)
-{
+function Start-ContextMenuProcess
+(
+    [ValidateSet("Import-ContextMenuItem", "Remove-ContextMenuItem")]
+    [string] $FunctionName,
+    [string] $ArgumentList,
+    [string] $Message
+) {
     $emptyRegex    = "^(\s|)*$"
     $commentsRegex = "^#"
 
