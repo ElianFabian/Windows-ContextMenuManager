@@ -11,7 +11,7 @@ Import-Module -Name "$PSScriptRoot\ObjectManipulation.psm1"
 function NewCommandItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
     # Create command item
-    $commandPath = (New-Item -Path $ItemPath -Name command).PSPath
+    $commandPath = (New-Item -Path $ItemPath -Name Command).PSPath
 
     # Set command name
     New-ItemProperty -Path $ItemPath -Name '(default)' -Value $Item.$PROPERTY_NAME > $null
@@ -103,10 +103,10 @@ function Import-ContextMenuItem([string] $Path, [switch] $Verbose)
 
 function RemoveCommandItem([string] $ItemPath, [switch] $Verbose)
 {
-    Remove-Item -Path $ItemPath\command
+    Remove-Item -Path $ItemPath\Command
     Remove-Item -Path $ItemPath
 
-    Write-Verbose "Remove item: '$ItemPath\command'" -Verbose:$Verbose
+    Write-Verbose "Remove item: '$ItemPath\Command'" -Verbose:$Verbose
     Write-Verbose "Remove item: '$ItemPath'" -Verbose:$Verbose
 }
 
