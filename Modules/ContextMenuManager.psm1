@@ -101,6 +101,7 @@ function Import-ContextMenuItem([string] $Path, [switch] $Verbose)
     }
 }
 
+
 function RemoveCommandItem([string] $ItemPath, [switch] $Verbose)
 {
     Remove-Item -Path $ItemPath\Command
@@ -160,6 +161,7 @@ function Remove-ContextMenuItem([string] $Path, [switch] $Verbose)
         RemoveContextMenuItem -Item $item -ItemPath $itemPath -Verbose:$Verbose
     }   
 }
+
 
 function Start-ContextMenuProcess
 (
