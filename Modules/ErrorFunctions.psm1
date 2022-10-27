@@ -68,7 +68,7 @@ function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
 {
     $isValid = $true
 
-    $sameLevelItemKeys = new-Object System.Collections.Generic.HashSet[string]
+    $keysOfTheSameLevelOfDepth = new-Object System.Collections.Generic.HashSet[string]
 
     foreach ($item in $Items)
     {
@@ -86,7 +86,7 @@ function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
             {
                 $PROPERTY_KEY
                 {
-                    if ( -not $sameLevelItemKeys.Add($propertyValue))
+                    if ( -not $keysOfTheSameLevelOfDepth.Add($propertyValue))
                     {
                         WriteError "'$propertyValue' is a repeated key at:`n$Path`n`nKeys must be unique in the same level of depth."
                         return $false
