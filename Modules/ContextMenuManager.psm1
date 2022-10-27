@@ -24,20 +24,20 @@ function NewCommandItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
     $commandPath = (New-Item -Path $ItemPath -Name $RP_COMMAND).PSPath
 
     # Set command name
-    New-ItemProperty -Path $ItemPath -Name $RP_DEFAULT -Value $Item.$PROPERTY_NAME > $null
+    New-ItemProperty -Path $ItemPath -Name $RP_DEFAULT -Value $Item.$P_NAME > $null
 
     # Set command value
-    New-ItemProperty -LiteralPath $commandPath -Name $RP_DEFAULT -Value $Item.$PROPERTY_COMMAND > $null
+    New-ItemProperty -LiteralPath $commandPath -Name $RP_DEFAULT -Value $Item.$P_COMMAND > $null
 
     Write-Verbose "New item: '$commandPath'" -Verbose:$Verbose
-    Write-Verbose "New item property: '$ItemPath\$RP_DEFAULT' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
-    Write-Verbose "New item property: '$commandPath\$RP_DEFAULT' = '$($Item.$PROPERTY_COMMAND)'" -Verbose:$Verbose
+    Write-Verbose "New item property: '$ItemPath\$RP_DEFAULT' = '$($Item.$P_NAME)'" -Verbose:$Verbose
+    Write-Verbose "New item property: '$commandPath\$RP_DEFAULT' = '$($Item.$P_COMMAND)'" -Verbose:$Verbose
 }
 
 function NewGroupItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
     # Set group name (MUIVerb)
-    New-ItemProperty -Path $ItemPath -Name $RP_MUI_VERB -Value $Item.$PROPERTY_NAME > $null
+    New-ItemProperty -Path $ItemPath -Name $RP_MUI_VERB -Value $Item.$P_NAME > $null
 
     # Allow subitems
     New-ItemProperty -Path $ItemPath -Name $RP_SUBCOMMANDS > $null
@@ -45,7 +45,7 @@ function NewGroupItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
     # Create shell (container of subitems)
     $itemShellPath = (New-Item -Path $ItemPath -Name $RP_SHELL).PSPath.Replace("*", "``*")
 
-    Write-Verbose "New item property: '$ItemPath\$RP_MUI_VERB' = '$($Item.$PROPERTY_NAME)'" -Verbose:$Verbose
+    Write-Verbose "New item property: '$ItemPath\$RP_MUI_VERB' = '$($Item.$P_NAME)'" -Verbose:$Verbose
     Write-Verbose "New item property: '$ItemPath\$RP_SUBCOMMANDS'" -Verbose:$Verbose
     Write-Verbose "New item: '$itemShellPath'" -Verbose:$Verbose
 
@@ -54,9 +54,9 @@ function NewGroupItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 
 function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
 {
-    if ($Item.$PROPERTY_ICON)
+    if ($Item.$P_ICON)
     {
-        $iconPath = Resolve-Path $Item.$PROPERTY_ICON
+        $iconPath = Resolve-Path $Item.$P_ICON
 
         # Set item image
         New-ItemProperty -Path $ItemPath -Name Icon -Value $iconPath > $null
@@ -64,16 +64,16 @@ function NewContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $Verb
         Write-Verbose "New item property: '$ItemPath' = '$iconPath'" -Verbose:$Verbose
     }
 
-    if ($item.$PROPERTY_OPTIONS)
+    if ($item.$P_OPTIONS)
     {
         $itemShellPath = NewGroupItem -Item $Item -ItemPath $ItemPath -Verbose:$Verbose
 
         # Create subitems
-        foreach ($subitem in $Item.$PROPERTY_OPTIONS)
+        foreach ($subitem in $Item.$P_OPTIONS)
         {
-            $subitemPath = (New-Item -Path $itemShellPath -Name $subitem.$PROPERTY_KEY).PSPath.Replace("*", "``*")
+            $subitemPath = (New-Item -Path $itemShellPath -Name $subitem.$P_KEY).PSPath.Replace("*", "``*")
 
-            Write-Verbose "New item: '$itemShellPath\$($subitem.$PROPERTY_KEY)'" -Verbose:$Verbose
+            Write-Verbose "New item: '$itemShellPath\$($subitem.$P_KEY)'" -Verbose:$Verbose
 
             NewContextMenuItem -Item $subitem -ItemPath $subitemPath -Verbose:$Verbose
         }
@@ -90,14 +90,14 @@ function Import-ContextMenuItem([string] $Path, [switch] $Verbose)
 
     foreach ($item in $contextMenuItemsJson)
     {
-        $contextMenuTypePath = $contextMenuTypePaths.$($item.$PROPERTY_TYPE)
+        $contextMenuTypePath = $contextMenuTypePaths.$($item.$P_TYPE)
 
         # Create item
-        $itemPath = (New-Item -Path $contextMenuTypePath -Name $item.$PROPERTY_KEY -ErrorAction Stop).PSPath.Replace("*", "``*")
+        $itemPath = (New-Item -Path $contextMenuTypePath -Name $item.$P_KEY -ErrorAction Stop).PSPath.Replace("*", "``*")
 
-        Write-Verbose "New item: '$contextMenuTypePath\$($item.$PROPERTY_KEY)'" -Verbose:$Verbose
+        Write-Verbose "New item: '$contextMenuTypePath\$($item.$P_KEY)'" -Verbose:$Verbose
 
-        $extendedValue = $item.$PROPERTY_EXTENDED
+        $extendedValue = $item.$P_EXTENDED
 
         if ($null -ne $extendedValue -and $extendedValue -like $true)
         {
@@ -140,12 +140,12 @@ function RemoveContextMenuItem([psobject] $Item, [string] $ItemPath, [switch] $V
         return
     }
 
-    if ($item.$PROPERTY_OPTIONS)
+    if ($item.$P_OPTIONS)
     {
         # Remove subitems
-        foreach ($item in $item.$PROPERTY_OPTIONS)
+        foreach ($item in $item.$P_OPTIONS)
         {
-            $subitemPath = "$ItemPath\$RP_SHELL\$($item.$PROPERTY_KEY)"
+            $subitemPath = "$ItemPath\$RP_SHELL\$($item.$P_KEY)"
 
             RemoveContextMenuItem -Item $item -ItemPath $subitemPath -Verbose:$Verbose
         }
@@ -164,9 +164,9 @@ function Remove-ContextMenuItem([string] $Path, [switch] $Verbose)
 
     foreach ($item in $contextMenuItemsJson)
     {
-        $contextMenuTypePath = $contextMenuTypePaths.$($item.$PROPERTY_TYPE)
+        $contextMenuTypePath = $contextMenuTypePaths.$($item.$P_TYPE)
 
-        $itemPath = "$contextMenuTypePath\$($item.$PROPERTY_KEY)"
+        $itemPath = "$contextMenuTypePath\$($item.$P_KEY)"
 
         RemoveContextMenuItem -Item $item -ItemPath $itemPath -Verbose:$Verbose
     }   

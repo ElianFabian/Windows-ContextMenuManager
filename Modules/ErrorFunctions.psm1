@@ -84,7 +84,7 @@ function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
 
             switch ($propertyName)
             {
-                $PROPERTY_KEY
+                $P_KEY
                 {
                     if ( -not $keysOfTheSameLevelOfDepth.Add($propertyValue))
                     {
@@ -92,7 +92,7 @@ function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
                         return $false
                     }
                 }
-                $PROPERTY_EXTENDED
+                $P_EXTENDED
                 {
                     if (-not ($propertyValue -like $true -or $propertyValue -like $false))
                     {
@@ -100,7 +100,7 @@ function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
                         return $false
                     }
                 }
-                $PROPERTY_TYPE
+                $P_TYPE
                 {
                     if (-not ($contextMenuTypePaths.Keys -contains $propertyValue))
                     {
@@ -108,7 +108,7 @@ function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
                         return $false
                     }
                 }
-                $PROPERTY_ICON
+                $P_ICON
                 {
                     if (-not (Test-Path $propertyValue))
                     {
@@ -116,7 +116,7 @@ function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
                         return $false
                     }
                 }
-                $PROPERTY_OPTIONS { $isValid = TestObjectKeyNamesAndValues_WriteError -Items $propertyValue -Path $Path }
+                $P_OPTIONS { $isValid = TestObjectKeyNamesAndValues_WriteError -Items $propertyValue -Path $Path }
             }
         }
     }

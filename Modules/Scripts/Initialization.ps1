@@ -23,13 +23,14 @@ if (-not (Test-Path $settingsIniPath))
 
 $settings = Get-Content -Path $settingsIniPath -Encoding utf8 | ConvertFrom-StringData
 
-$PROPERTY_KEY      = $settings.PROPERTY_KEY
-$PROPERTY_NAME     = $settings.PROPERTY_NAME
-$PROPERTY_TYPE     = $settings.PROPERTY_TYPE
-$PROPERTY_COMMAND  = $settings.PROPERTY_COMMAND
-$PROPERTY_OPTIONS  = $settings.PROPERTY_OPTIONS
-$PROPERTY_EXTENDED = $settings.PROPERTY_EXTENDED
-$PROPERTY_ICON     = $settings.PROPERTY_ICON
+# JSON/XML property names
+$P_KEY      = $settings.PROPERTY_KEY
+$P_NAME     = $settings.PROPERTY_NAME
+$P_TYPE     = $settings.PROPERTY_TYPE
+$P_COMMAND  = $settings.PROPERTY_COMMAND
+$P_OPTIONS  = $settings.PROPERTY_OPTIONS
+$P_EXTENDED = $settings.PROPERTY_EXTENDED
+$P_ICON     = $settings.PROPERTY_ICON
 
 $VALID_PROPERTY_SET = foreach ($propertyName in $settings.Keys)
 {
@@ -38,7 +39,6 @@ $VALID_PROPERTY_SET = foreach ($propertyName in $settings.Keys)
         $settings.$propertyName
     }
 }
-
 
 $CONSOLE_VERBOSE = [System.Convert]::ToBoolean($settings.CONSOLE_VERBOSE)
 $CONSOLE_NO_EXIT = [System.Convert]::ToBoolean($settings.CONSOLE_NO_EXIT)
