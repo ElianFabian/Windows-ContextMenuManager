@@ -1,3 +1,4 @@
+
 # Windows-ContextMenuManager
 A simple set of PowerShell scripts to add options to the Windows' context menu from json or xml files.
 
@@ -80,7 +81,8 @@ Avoid changing the key because if you import the context menu, then change one k
 We have to different first-level items, which are the ones who aren't inside another group, these are kind of special because they have 2 properties subitems can't have:
 - **Type**: indicates where the context menu items must appear. There are 4 types:
 > [File, Directory, Desktop, Drive]
-- **Extended**: when present and set to true you have to hold *Shift* to make the item visible. Setting the value to false has the same effect as removing the property.
+- **Extended**: if present and set to true you have to hold *Shift* to make the item visible. Setting the value to false has the same effect as removing the property.
+- **Position**: if present sets the item position to Top or Bottom.
 
 Lastly there 2 left properties that exclusively belong to either commands or groups:
 - **Commad**: it's a string of code.
@@ -102,4 +104,9 @@ In case your file has a wrong format or even inappropriate keys or values it wil
 In order to see the error you should set <b>CONSOLE_NO_EXIT</b> to <b>true</b> in [**settings.ini**](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/settings.ini) to avoid autoclosing the console.
 
 # Extra
-In case you want to know what is the manual way of adding context menus items check this [medium article](https://medium.com/analytics-vidhya/creating-cascading-context-menus-with-the-windows-10-registry-f1cf3cd8398f).
+I want to mention that I may be missing some features of the context menu items because of my lack of knowledge on this topic, but probably I will be adding more features when learning more or in case someone wants to give any idea.
+
+In case you want to know what is the manual way of adding context menus items check these articles:
+- https://medium.com/analytics-vidhya/creating-cascading-context-menus-with-the-windows-10-registry-f1cf3cd8398f
+- https://www.askvg.com/add-cascading-menus-for-your-favorite-programs-in-windows-7-desktop-context-menu/
+- https://learn.microsoft.com/en-us/windows/win32/shell/context-menu-handlers

@@ -20,7 +20,6 @@ function TestJsonString($JsonString)
     try
     {
         ConvertFrom-Json $JsonString -ErrorAction Stop > $null
-
         return $true
     }
     catch { return $false }
@@ -31,7 +30,6 @@ function TestXmlString($XmlString)
     try
     {
         [xml]($XmlString) > $null
-
         return $true
     }
     catch { return $false }
@@ -82,6 +80,13 @@ function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
 
             $propertyValue = $item.$propertyName
 
+            $propertySplat =
+            @{
+                PropertyName = $propertyName
+                PropertyValue = $propertyValue
+                FilePath = $Path
+            }
+
             switch ($propertyName)
             {
                 $P_KEY
@@ -89,22 +94,6 @@ function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
                     if ( -not $keysOfTheSameLevelOfDepth.Add($propertyValue))
                     {
                         WriteError "'$propertyValue' is a repeated key at:`n$Path`n`nKeys must be unique in the same level of depth."
-                        return $false
-                    }
-                }
-                $P_EXTENDED
-                {
-                    if (-not ($propertyValue -like $true -or $propertyValue -like $false))
-                    {
-                        WriteError "'$propertyValue' is not a valid value for the 'Extended' property at:`n$Path.`n`nThis is the valid set: [true, false]"
-                        return $false
-                    }
-                }
-                $P_TYPE
-                {
-                    if (-not ($contextMenuTypePaths.Keys -contains $propertyValue))
-                    {
-                        WriteError "'$propertyValue' is not a valid value for the 'Type' property at:`n$Path.`n`nThis is the valid set: [$($contextMenuTypePaths.Keys -join ', ')]"
                         return $false
                     }
                 }
@@ -117,9 +106,37 @@ function TestObjectKeyNamesAndValues_WriteError([array] $Items, [string] $Path)
                     }
                 }
                 $P_OPTIONS { $isValid = TestObjectKeyNamesAndValues_WriteError -Items $propertyValue -Path $Path }
+                $P_TYPE
+                {
+                    if (-not (TestPropertyValueInSet @propertySplat -ValidSet $contextMenuTypePaths.Keys)) { return $false }
+                }
+                $P_EXTENDED
+                {
+                    if (-not (TestPropertyValueInSet @propertySplat -ValidSet 'true','false')) { return $false }
+                }
+                $P_POSITION
+                {
+                    if (-not (TestPropertyValueInSet @propertySplat -ValidSet 'Top','Bottom')) { return $false }
+                }
             }
         }
     }
 
     return $isValid
+}
+
+function TestPropertyValueInSet
+(
+    [string] $PropertyName,
+    [string] $PropertyValue,
+    [string] $FilePath,
+    [string[]] $ValidSet 
+) {
+    if ($ValidSet -contains $PropertyValue)
+    {
+        return $true
+    }
+
+    WriteError "'$PropertyValue' is not a valid value for the '$PropertyName' property at:`n$FilePath.`n`nThis is the valid set: [$($ValidSet -join ', ')]"
+    return $false
 }

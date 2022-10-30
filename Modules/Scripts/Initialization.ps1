@@ -31,6 +31,7 @@ $P_COMMAND  = $settings.PROPERTY_COMMAND
 $P_OPTIONS  = $settings.PROPERTY_OPTIONS
 $P_EXTENDED = $settings.PROPERTY_EXTENDED
 $P_ICON     = $settings.PROPERTY_ICON
+$P_POSITION = $settings.PROPERTY_POSITION
 
 $VALID_PROPERTY_SET = foreach ($propertyName in $settings.Keys)
 {

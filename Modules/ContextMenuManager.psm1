@@ -8,15 +8,17 @@ Import-Module -Name "$PSScriptRoot\ObjectManipulation.psm1"
 
 
 
-# Registry properties
-$RP_DEFAULT     = '(default)'
-$RP_COMMAND     = 'Command'
+# Registry keys
 $RP_SHELL       = 'Shell'
+$RP_COMMAND     = 'Command'
+
+# Registry string values
+$RP_DEFAULT     = '(default)'
 $RP_MUI_VERB    = 'MUIVerb'
 $RP_SUBCOMMANDS = 'Subcommands'
 $RP_EXTENDED    = 'Extended'
 $RP_ICON        = 'Icon'
-
+$RP_POSITION    = 'Position'
 
 
 function NewCommandItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
@@ -104,6 +106,14 @@ function Import-ContextMenuItem([string] $Path, [switch] $Verbose)
             New-ItemProperty -Path $itemPath -Name $RP_EXTENDED > $null
 
             Write-Verbose "New item property: '$itemPath\$RP_EXTENDED'" -Verbose:$Verbose
+        }
+
+        if ($null -ne $item.$P_POSITION)
+        {
+            # Set the position of the item (Top | Bottom)
+            New-ItemProperty -Path $itemPath -Name $RP_POSITION -Value $item.$P_POSITION > $null
+
+            Write-Verbose "New item property: '$itemPath\$RP_POSITION'" -Verbose:$Verbose
         }
 
         NewContextMenuItem -Item $item -ItemPath $itemPath -Verbose:$Verbose
