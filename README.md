@@ -79,11 +79,11 @@ Avoid changing the key because if you import the context menu, then change one k
 - **Icon**: it's the icon of the item, it must be a .ico file, you can use an absolute or a relative path.
 
 We have to different first-level items, which are the ones who aren't inside another group, these are kind of special because they have 2 properties subitems can't have:
-- **Type**: indicates where the context menu items must appear. There are 4 types:
+- **Type**: indicates where the context menu items must appear. These are the valid values:
 > [File, Directory, Desktop, Drive]
-- **Extended**: if present and set to true you have to hold *Shift* to make the item visible. Setting the value to false has the same effect as removing the property.
-- **Position**: if present sets the item position to Top or Bottom.
-
+- **Extended**: if present and set to *true* you have to hold *Shift* to make the item visible. Setting the value to false has the same effect as removing the property.
+- **Position**: if present sets the item position. These are the valid values:
+> [Top, Bottom]
 Lastly there 2 left properties that exclusively belong to either commands or groups:
 - **Commad**: it's a string of code.
 - **Options**: it's an array of groups and commads (in xml files you add the items as child nodes).
