@@ -106,7 +106,7 @@ In order to see the error you should set <b>CONSOLE_NO_EXIT</b> to <b>true</b> i
 # Extra
 I want to mention that I may be missing some features of the context menu items because of my lack of knowledge on this topic, but probably I will be adding more features when learning more or in case someone wants to give any idea.
 
-In case you want to know what is the manual way of adding context menus items check these articles:
+In case you want to know what is the manual way of adding context menu items check these articles:
 - https://medium.com/analytics-vidhya/creating-cascading-context-menus-with-the-windows-10-registry-f1cf3cd8398f
 - https://www.askvg.com/add-cascading-menus-for-your-favorite-programs-in-windows-7-desktop-context-menu/
 - https://learn.microsoft.com/en-us/windows/win32/shell/context-menu-handlers
