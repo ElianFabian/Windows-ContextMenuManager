@@ -1,27 +1,27 @@
 
 # Windows-ContextMenuManager
-A simple set of PowerShell scripts to add options to the Windows' context menu from json or xml files.
+A simple set of PowerShell scripts to add options to the Windows' context menu from JSON or XML files.
 
 ![context-menu](https://user-images.githubusercontent.com/86477169/189173085-67539358-1f1c-4bba-86d3-eeacd1c5d038.PNG)
 
 # Introduction
 We have 2 main scripts: **Import-ContextMenuItem.ps1** and **Remove-ContextMenuItem.ps1**.
 What they do is to read all the files listed in **context-menu-list.txt**, 
-they can be single files or folders with files in it, and it allows both absolute and relative paths.
+they can be single files or folders with files in them, and it allows absolute and relative paths.
 
 As metion these file paths are stored in **context-menu-list.txt**, it's one path per line, and also allows comments that start with "#" and empty lines.
 
-In case you want to change the configuration you can do it with [**settings.ini**](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/settings.ini), it stores the name of the list of paths to read (by default it's context-menu-list.txt),
-and also as we'll see later you can change the names of the properties in the files as you wish (I don't think you're going to need to do that, but I it's up to you).
+In case you want to change the default configuration you can do it in [**settings.ini**](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/settings.ini), it stores the path of the list of paths to read (by default it's context-menu-list.txt),
+and also as we'll see later you can change the names of the properties in the files as you wish (you could use it to translate them to the language you want).
 
-Finally the **BasicSetup.ps1** script, it generates the basic needed files needed for the scripts to work and also generates a json and xml template inside the "Source" folder as an example
+Finally the **BasicSetup.ps1** script, it generates the basic needed files needed for the scripts to work and also generates a JSON and XML template inside the "Source" folder as an example
 (this repository already includes those generated files).
-In case you have setup your directory and executes the script, it won't override any of your existing scripts with the same name as the generated ones.
+In case you have setup your directory and execute the script it won't override any of your existing scripts with the same name as the generated ones.
 
-There's also the **Update-ContextMenuItem.ps1** that executes first remove and then import.
+There's also the **Update-ContextMenuItem.ps1** that first executes Remove and then Import.
 
 # How context menus work
-This is an example of how to create items and groups with json and xml:
+This is an example of how to create items and groups with JSON and XML:
 
 **JSON**
 ``` js
@@ -74,7 +74,7 @@ The first type executes code and the other it's just a container.
 
 All the items in context menus have 3 common properties:
 - <b>Key</b>: it's the way to identify an item in the same level of depth, this is the name stored in the Windows' registry.
-Avoid changing the key because if you import the context menu, then change one key and then try to remove it won't do it properly.
+Avoid changing the key because if you import the context menu items, then change one key and try to remove it won't work properly.
 -  **Name**: this is the name you will see in the context menu.
 - **Icon**: it's the icon of the item, it must be a .ico file, you can use an absolute or a relative path.
 
@@ -87,13 +87,13 @@ We have to different first-level items, which are the ones who aren't inside ano
 
 Lastly there 2 left properties that exclusively belong to either commands or groups:
 - **Commad**: it's a string of code.
-- **Options**: it's an array of groups and commads (in xml files you add the items as child nodes).
+- **Options**: it's an array of groups and commads (in XML files you add the items as child nodes).
 
 To better undertand the json structure consider checking out this json template: [context-menu-items.json](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.json).
 
-In here you have the xml template: [context-menu-items.xml](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.xml).
+In here you have the XML template: [context-menu-items.xml](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.xml).
 
-Keep in mind that in xml the tag names are actually arbitrary, if you change the names of **Root**, **Item** or **ItemGroup** tags it will have no effect.
+Keep in mind that in XML the tag names are actually arbitrary, if you change the names of **Root**, **Item** or **ItemGroup** tags it will have no effect.
 
 # How to use
 
