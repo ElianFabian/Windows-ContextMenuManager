@@ -74,7 +74,7 @@ The first type executes code and the other it's just a container.
 
 All the items in context menus have 3 common properties:
 - <b>Key</b>: it's the way to identify an item in the same level of depth, this is the name stored in the Windows' registry.
-Avoid changing the key because if you import the context menu items, then change one key and try to remove it won't work properly.
+Avoid changing the key because if you import the context menu items, then change one key and try to remove them it won't work properly.
 -  **Name**: this is the name you will see in the context menu.
 - **Icon**: it's the icon of the item, it must be a .ico file, you can use an absolute or a relative path.
 
