@@ -1,5 +1,5 @@
 # You can add all the files you want, with relative or absolute path, also folders with a list of json or xml files
 # As you see commets starts with a hash (#)
 
-# This is the deafault json with a context menu
+# This is the deafault JSON with context menu options
 Resource/context-menu-items.json
