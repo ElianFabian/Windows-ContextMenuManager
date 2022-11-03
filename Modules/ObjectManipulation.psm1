@@ -2,7 +2,11 @@ Import-Module -Name "$PSScriptRoot\ErrorFunctions.psm1"
 
 
 
-function ConvertXmlObjectToJsonObject($XmlRoot)
+. "$PSScriptRoot\Scripts\Initialization.ps1"
+
+
+
+function ConvertXmlObjectToJsonObject([System.Xml.XmlNode] $XmlRoot)
 {
     $itemArray = New-Object System.Collections.Generic.List[PSCustomObject]
 
@@ -18,8 +22,8 @@ function ConvertXmlObjectToJsonObject($XmlRoot)
         $itemArray.Add($jsonItem)
 
         if ($child.HasChildNodes)
-        { 
-            Add-Member -InputObject $jsonItem -Name $PROPERTY_OPTIONS -Value (ConvertXmlObjectToJsonObject $child) -MemberType NoteProperty
+        {
+            Add-Member -InputObject $jsonItem -Name $P_OPTIONS -Value (ConvertXmlObjectToJsonObject $child) -MemberType NoteProperty
         }
     }
 
@@ -35,7 +39,7 @@ function GetObjectFromJsonOrXml($Path)
     $object = switch ($fileExtension)
     {
         .json { $fileContent | ConvertFrom-Json }
-        .xml { ConvertXmlObjectToJsonObject -XmlRoot ([xml]($fileContent)).DocumentElement }
+        .xml { ConvertXmlObjectToJsonObject -XmlRoot ([xml]$fileContent).DocumentElement }
         default
         {
             Write-Error "$Path file type '$fileExtension' not supported."
