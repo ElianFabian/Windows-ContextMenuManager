@@ -86,7 +86,7 @@ We have to different first-level items, which are the ones who aren't inside ano
 > [Top, Bottom]
 
 Lastly there 2 left properties that exclusively belong to either commands or groups:
-- **Commad**: it's a string of code.
+- **Command**: it's a string of code.
 - **Options**: it's an array of groups and commads (in XML files you add the items as child nodes).
 
 To better undertand the json structure consider checking out this json template: [context-menu-items.json](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/Resource/context-menu-items.json).
