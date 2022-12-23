@@ -12,7 +12,7 @@ Import-Module -Name "$PSScriptRoot\ObjectManipulation.psm1"
 $RP_SHELL       = 'Shell'
 $RP_COMMAND     = 'Command'
 
-# Registry string values
+# Registry properties
 $RP_DEFAULT     = '(default)'
 $RP_MUI_VERB    = 'MUIVerb'
 $RP_SUBCOMMANDS = 'Subcommands'
