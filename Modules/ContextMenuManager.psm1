@@ -46,7 +46,7 @@ function NewGroupItem([psobject] $Item, [string] $ItemPath, [switch] $Verbose)
     New-ItemProperty -Path $ItemPath -Name $RP_SUBCOMMANDS > $null
 
     # Create shell (container of subitems)
-    $itemShellPath = (New-Item  -Path $ItemPath -Name $RP_SHELL).PSPath.Replace("*", "``*")
+    $itemShellPath = (New-Item -Path $ItemPath -Name $RP_SHELL).PSPath.Replace("*", "``*")
 
     Write-Verbose "New item property: '$ItemPath\$RP_MUI_VERB' = '$($Item.$P_NAME)'" -Verbose:$Verbose
     Write-Verbose "New item property: '$ItemPath\$RP_SUBCOMMANDS'" -Verbose:$Verbose
