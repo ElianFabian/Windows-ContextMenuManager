@@ -98,7 +98,7 @@ Keep in mind that in XML the tag names are actually arbitrary, if you change the
 
 # How to use
 
-First of all you will probably have to do the following in order to make it work:
+First, you will probably have to do the following in order to make it work:
 - Run a PowerShell console as administrator and execute this:
  ```
  Set-ExecutionPolicy -ExecutionPolicy Bypass
