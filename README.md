@@ -1,4 +1,5 @@
 
+
 # Windows-ContextMenuManager
 A simple set of PowerShell scripts to add options to the Windows' context menu from JSON or XML files.
 
@@ -97,7 +98,15 @@ Keep in mind that in XML the tag names are actually arbitrary, if you change the
 
 # How to use
 
-Assuming you downloaded the repository and you already have your file(s) ready you only have to execute **Import-ContextMenuItem.ps1** to import your context menu items. It may take a few seconds to import it, you will know it finished when the empty console window closes automatically.
+First of all you will probably have to do the following in order to make it work:
+- Run a PowerShell console as administrator and execute this:
+ ```
+ Set-ExecutionPolicy -ExecutionPolicy Bypass
+ ```
+
+In general doing this is not a good idea because you're more exposed in case you try to execute dangerous scripts, but, it's the only way to make this work.
+
+Assuming you've downloaded the repository and you already have your file(s) ready you only have to execute **Import-ContextMenuItem.ps1** to import your context menu items. It may take a few seconds to import it, you will know it finished when the empty console window closes automatically.
 When you want to remove the context menu just execute **Remove-ContextMenuItem.ps1**.
 Removing it's faster than importing.
 
@@ -105,6 +114,7 @@ In case your file has a wrong format or even inappropriate keys or values it wil
 In order to see the error you should set <b>CONSOLE_NO_EXIT</b> to <b>true</b> in [**settings.ini**](https://github.com/ElianFabian/Windows-ContextMenuManager/blob/main/settings.ini) to avoid autoclosing the console.
 
 # Extra
+
 I want to mention that I may be missing some features of the context menu items because of my lack of knowledge on this topic, but probably I will be adding more features when learning more or in case someone wants to give any idea.
 
 In case you want to know what is the manual way of adding context menu items check these articles:
